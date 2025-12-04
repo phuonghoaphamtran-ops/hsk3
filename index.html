@@ -1,0 +1,2394 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>PTPH - ÔN TẬP HSK3</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg1:#93c5fd;
+      --bg2:#d8b4fe;
+      --card-bg:#ffffff;
+      --accent:#2563eb;
+      --accent-soft:rgba(37,99,235,0.08);
+      --danger:#ef4444;
+      --success:#16a34a;
+    }
+
+    *{box-sizing:border-box;}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      background:linear-gradient(135deg,var(--bg1),var(--bg2));
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      padding:20px 10px 32px;
+      color:#0f172a;
+    }
+
+    .page{
+      width:100%;
+      max-width:1080px;
+      background:rgba(255,255,255,0.96);
+      border-radius:24px;
+      box-shadow:0 18px 45px rgba(15,23,42,0.16);
+      padding:20px 16px 24px;
+      backdrop-filter:saturate(1.2) blur(8px);
+    }
+
+    header{
+      text-align:center;
+      margin-bottom:14px;
+    }
+    header h1{
+      margin:0 0 4px;
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:0.02em;
+      color:#020617;
+    }
+    header p{
+      margin:0;
+      font-size:13px;
+      color:#6b7280;
+    }
+
+    /* mode tabs */
+
+    .mode-tabs{
+      display:flex;
+      gap:8px;
+      margin:16px 0 12px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .mode-btn{
+      border-radius:999px;
+      border:0;
+      padding:8px 14px;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      background:#e5e7eb;
+      color:#374151;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      box-shadow:0 3px 8px rgba(15,23,42,0.12);
+    }
+    .mode-btn span.icon{
+      font-size:15px;
+    }
+    .mode-btn.active{
+      background:linear-gradient(135deg,#2563eb,#4f46e5);
+      color:#fff;
+    }
+
+    .mode{
+      display:none;
+      margin-top:4px;
+    }
+    .mode.active{
+      display:block;
+    }
+
+    .mode-title{
+      font-weight:800;
+      margin:4px 0 8px;
+      font-size:16px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+      color:#111827;
+    }
+
+    .mode-desc{
+      font-size:13px;
+      color:#6b7280;
+      margin-bottom:10px;
+    }
+
+    /* shared small components */
+
+    .panel{
+      border-radius:16px;
+      background:#f9fafb;
+      padding:14px;
+      border:1px solid #e5e7eb;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:3px 8px;
+      border-radius:999px;
+      font-size:11px;
+      background:rgba(37,99,235,0.06);
+      color:#1d4ed8;
+      font-weight:600;
+      margin-left:4px;
+    }
+
+    .btn-main{
+      padding:8px 14px;
+      border-radius:10px;
+      border:0;
+      cursor:pointer;
+      font-weight:700;
+      background:linear-gradient(135deg,#2563eb,#4f46e5);
+      color:#fff;
+      box-shadow:0 4px 12px rgba(37,99,235,0.4);
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .btn-ghost{
+      padding:8px 12px;
+      border-radius:10px;
+      border:1px dashed #cbd5f5;
+      cursor:pointer;
+      background:#f9fafb;
+      font-weight:600;
+      color:#4b5563;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .feedback{
+      margin-top:8px;
+      font-size:13px;
+      min-height:18px;
+    }
+    .feedback.ok{color:var(--success);}
+    .feedback.err{color:var(--danger);}
+
+    /* MODE 2: gõ Hán tự (giữ class m1- cho đỡ sửa CSS) */
+
+    .m1-row{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .m1-label{
+      font-size:13px;
+      color:#6b7280;
+      margin-bottom:2px;
+    }
+    .m1-vn{
+      font-size:20px;
+      font-weight:800;
+      color:#111827;
+      padding:10px 12px;
+      border-radius:14px;
+      background:#eef2ff;
+      border:1px solid #c7d2fe;
+    }
+    .m1-pinyin{
+      font-size:14px;
+      color:#4b5563;
+      margin-top:4px;
+    }
+    .m1-input-wrap{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-top:8px;
+    }
+    .m1-input-wrap input{
+      font-size:18px;
+      padding:8px 10px;
+      border-radius:10px;
+      border:1px solid #d1d5db;
+    }
+    .m1-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:6px;
+    }
+
+    /* MODE 3: điền từ vào câu (giữ class m2-) */
+
+    .m2-sentence{
+      font-size:18px;
+      font-weight:700;
+      margin-bottom:6px;
+      color:#111827;
+    }
+    .m2-vn{
+      font-size:13px;
+      color:#6b7280;
+      margin-bottom:10px;
+    }
+    .m2-options{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:8px;
+    }
+    .m2-option{
+      border-radius:999px;
+      border:0;
+      padding:6px 12px;
+      font-size:14px;
+      cursor:pointer;
+      background:#e5e7eb;
+      color:#374151;
+      font-weight:600;
+    }
+    .m2-option.correct{
+      background:rgba(22,163,74,0.12);
+      color:#166534;
+      border:1px solid rgba(22,163,74,0.5);
+    }
+    .m2-option.wrong{
+      background:rgba(239,68,68,0.12);
+      color:#b91c1c;
+      border:1px solid rgba(239,68,68,0.5);
+    }
+    .m2-bottom{
+      margin-top:8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .m2-bottom small{
+      font-size:11px;
+      color:#6b7280;
+    }
+
+    /* MODE 1: flashcard – style cũ HSK3 */
+
+    #folderScreen{
+      width:100%;
+      max-width:960px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:stretch;
+      margin-top:4px;
+    }
+    .folders-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:10px;
+    }
+    .folder-card{
+      background:rgba(255,255,255,0.95);
+      border-radius:12px;
+      padding:12px;
+      box-shadow:0 6px 18px rgba(7,16,51,0.08);
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:flex-start;
+      transition:transform .15s ease,box-shadow .2s ease;
+    }
+    .folder-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 24px rgba(7,16,51,0.12);
+    }
+    .folder-title{
+      font-weight:800;
+      color:#071033;
+      font-size:16px;
+    }
+    .folder-range{
+      font-size:13px;
+      color:#374151;
+    }
+    .folder-progress{
+      font-size:13px;
+      color:#065f46;
+      margin-top:2px;
+    }
+    .progress{
+      height:6px;
+      background:#e5e7eb;
+      border-radius:999px;
+      overflow:hidden;
+      width:100%;
+    }
+    .progress .bar{
+      height:100%;
+      background:linear-gradient(90deg,#22c55e,#16a34a);
+      width:0%;
+    }
+    .folder-actions{
+      display:flex;
+      gap:8px;
+      margin-top:8px;
+      width:100%;
+    }
+    .btn{
+      padding:8px 10px;
+      border-radius:8px;
+      border:0;
+      cursor:pointer;
+      font-weight:700;
+    }
+    .btn.study{
+      background:var(--accent);
+      color:#fff;
+      flex:1;
+    }
+    .btn.reset{
+      background:#f59e0b;
+      color:#fff;
+      flex:0 0 auto;
+    }
+    .small-muted{
+      font-size:12px;
+      color:#6b7280;
+    }
+
+    #studyScreen{
+      display:none;
+      width:100%;
+      max-width:960px;
+      align-items:center;
+      flex-direction:column;
+      gap:12px;
+      margin-top:8px;
+    }
+    .topbar{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+    }
+    .back-btn{
+      padding:8px 12px;
+      border-radius:8px;
+      border:0;
+      background:#fff;
+      box-shadow:0 6px 12px rgba(0,0,0,0.06);
+      cursor:pointer;
+    }
+    .folder-label{
+      font-weight:700;
+      color:#071033;
+    }
+
+    .container{
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+    }
+    .wrapper{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:100%;
+    }
+    .flashcard{
+      width:min(100%,360px);
+      aspect-ratio:3/4;
+      perspective:1200px;
+      position:relative;
+      flex:0 0 auto;
+    }
+    .inner{
+      width:100%;
+      height:100%;
+      position:relative;
+      transition:transform .6s;
+      transform-style:preserve-3d;
+      cursor:pointer;
+      user-select:none;
+    }
+    .inner.flipped{
+      transform:rotateY(180deg);
+    }
+    .side{
+      position:absolute;
+      width:100%;
+      height:100%;
+      backface-visibility:hidden;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(7,16,51,0.18);
+      background:rgba(255,255,255,0.9);
+      backdrop-filter:saturate(1.2) blur(6px);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-start;
+      padding:20px;
+    }
+    .back{transform:rotateY(180deg);}
+    .icon-top{
+      font-size:60px;
+      color:var(--accent);
+      margin-top:6px;
+      margin-bottom:8px;
+    }
+    .word{
+      font-size:44px;
+      font-weight:800;
+      margin:6px 0;
+      color:#071033;
+      line-height:1;
+    }
+    .pinyin{
+      color:#374151;
+      margin:6px 0;
+      font-size:18px;
+      letter-spacing:.3px;
+    }
+    .meaning{
+      font-size:20px;
+      color:#111827;
+      margin-top:10px;
+      text-align:center;
+      font-weight:700;
+    }
+    .example{
+      font-size:15px;
+      color:#374151;
+      margin-top:14px;
+      text-align:center;
+      white-space:pre-line;
+      line-height:1.5;
+    }
+    .arrow{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      background:var(--accent);
+      color:#fff;
+      border:none;
+      border-radius:50%;
+      width:48px;
+      height:48px;
+      cursor:pointer;
+      font-size:22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:0 6px 16px rgba(0,0,0,0.18);
+    }
+    .arrow.left{left:-60px;}
+    .arrow.right{right:-60px;}
+    .speak{
+      position:absolute;
+      bottom:12px;
+      right:12px;
+      background:#10b981;
+      border:none;
+      border-radius:50%;
+      width:44px;
+      height:44px;
+      font-size:18px;
+      color:#fff;
+      cursor:pointer;
+      box-shadow:0 6px 14px rgba(0,0,0,0.12);
+      transition:transform .12s ease;
+    }
+    .speak:active{transform:scale(.96);}
+    .controls{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-top:8px;
+    }
+    .btn.again{
+      background:#ef4444;
+      color:#fff;
+      padding:10px 16px;
+      border-radius:10px;
+      border:0;
+      cursor:pointer;
+      font-weight:800;
+      min-width:120px;
+    }
+    .btn.known{
+      background:#10b981;
+      color:#fff;
+      padding:10px 16px;
+      border-radius:10px;
+      border:0;
+      cursor:pointer;
+      font-weight:800;
+      min-width:120px;
+    }
+    .note{
+      margin-top:10px;
+      font-size:13px;
+      color:#071033;
+      text-align:center;
+      max-width:960px;
+    }
+
+    /* NGỮ PHÁP – CARDS */
+
+    .section-heading{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:16px 0 8px;
+    }
+    .section-tag{
+      width:26px;
+      height:26px;
+      border-radius:999px;
+      background:#2563eb;
+      color:#fff;
+      font-size:13px;
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .section-title{
+      font-size:15px;
+      font-weight:800;
+      color:#111827;
+    }
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:10px;
+    }
+    .card{
+      background:#f9fafb;
+      border-radius:14px;
+      padding:10px 12px;
+      border:1px solid #e5e7eb;
+      font-size:13px;
+      color:#374151;
+    }
+    .card-number{
+      font-size:11px;
+      font-weight:700;
+      color:#9ca3af;
+    }
+    .card-title{
+      font-size:14px;
+      font-weight:700;
+      margin:4px 0 6px;
+      color:#111827;
+    }
+    .card-body p{
+      margin:4px 0;
+    }
+    .card-body ul{
+      margin:4px 0;
+      padding-left:18px;
+    }
+    .card-body li{
+      margin:2px 0;
+    }
+    .card-body .cn{
+      font-weight:700;
+      color:#111827;
+    }
+
+    /* nguồn – footer gradient nổi bật */
+
+    .source-footer{
+      margin-top:18px;
+      font-size:14px;
+      font-weight:800;
+      text-align:center;
+      background:linear-gradient(270deg,#60a5fa,#a78bfa,#f472b6);
+      background-size:300% 300%;
+      color:white;
+      padding:10px 18px;
+      border-radius:999px;
+      animation:glowmove 5s ease infinite;
+      box-shadow:0 4px 12px rgba(0,0,0,0.25);
+    }
+    .source-footer small{
+      display:block;
+      font-weight:500;
+      opacity:0.9;
+      margin-top:2px;
+    }
+
+    @keyframes glowmove{
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
+    }
+
+    @media (max-width:900px){
+      .flashcard{width:min(100%,320px);}
+      .arrow{display:none;}
+    }
+    @media (max-width:600px){
+      header h1{font-size:18px;}
+      .page{padding:16px 12px 20px;}
+      .flashcard{width:min(100%,300px);}
+      .folder-card{padding:10px;}
+      .folder-actions{flex-direction:column-reverse;gap:6px;}
+    }
+
+    @media (prefers-reduced-motion:reduce){
+      .inner{transition:none;}
+      .folder-card{transition:none;}
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>ÔN TẬP 600 TỪ VỰNG HSK3</h1>
+      <p>4 chế độ: Flashcards · Gõ Hán tự · Điền từ vào câu · Ngữ pháp HSK3</p>
+    </header>
+
+    <!-- mode tabs -->
+    <div class="mode-tabs">
+      <button class="mode-btn active" data-mode="mode1">
+        <span class="icon">🎴</span>Mode 1: Flashcards 600 từ
+      </button>
+      <button class="mode-btn" data-mode="mode2">
+        <span class="icon">⌨️</span>Mode 2: Gõ Hán tự
+      </button>
+      <button class="mode-btn" data-mode="mode3">
+        <span class="icon">🧩</span>Mode 3: Điền từ vào câu
+      </button>
+      <button class="mode-btn" data-mode="mode4">
+        <span class="icon">📚</span>Mode 4: Ngữ pháp HSK3
+      </button>
+    </div>
+
+    <!-- MODE 1: FLASHCARD -->
+    <section id="mode1" class="mode active">
+      <div class="mode-title">
+        1. Flashcards 600 từ HSK3
+        <span class="badge">Folder 25 từ / lưu tiến độ</span>
+      </div>
+      <p class="mode-desc">
+        Chia 600 từ thành các folder 25 từ. Bấm <b>Học</b> từng folder, đánh dấu <b>Known</b> để lưu tiến độ trên trình duyệt.
+        Bấm 🔊 để nghe phát âm (nếu trình duyệt hỗ trợ).
+      </p>
+
+      <!-- Folder selection screen -->
+      <div id="folderScreen">
+        <div class="small-muted" style="max-width:960px; margin-bottom:8px;">
+          Chọn một folder rồi nhấn <strong>Học</strong>. Bạn có thể <b>Reset</b> từng folder để học lại.
+        </div>
+        <div class="folders-grid" id="foldersGrid"></div>
+      </div>
+
+      <!-- Study screen -->
+      <div id="studyScreen">
+        <div class="topbar">
+          <button class="back-btn" id="backToFolders">← Quay lại</button>
+          <div class="folder-label" id="studyFolderLabel">Folder 1</div>
+          <div style="width:64px;"></div>
+        </div>
+
+        <div class="container">
+          <div class="wrapper">
+            <!-- mũi tên trái / phải -->
+            <button class="arrow left" id="prevBtn" title="Prev">‹</button>
+
+            <div class="flashcard" id="flashcard" aria-live="polite">
+              <div class="inner" id="inner">
+                <div class="side front">
+                  <div class="icon-top">🎴</div>
+                  <div class="word" id="hanzi">字</div>
+                  <div class="pinyin" id="pinyin">pinyin</div>
+                </div>
+                <div class="side back">
+                  <div class="icon-top">🎴</div>
+                  <div class="word" id="hanzi-back">字</div>
+                  <div class="pinyin" id="pinyin-back">pinyin</div>
+                  <div class="meaning" id="meaning">nghĩa tiếng Việt</div>
+                  <div class="example" id="example">Ví dụ</div>
+                </div>
+              </div>
+              <button class="speak" id="speakBtn" title="Nghe phát âm">🔊</button>
+            </div>
+
+            <button class="arrow right" id="nextBtn" title="Next">›</button>
+          </div>
+
+          <div class="controls">
+            <button class="btn again" id="againBtn">❌ Again</button>
+            <button class="btn known" id="knownBtn">✅ Known</button>
+          </div>
+        </div>
+
+        <div class="note">
+          👉 Chạm thẻ để lật • Vuốt phải = Next • Vuốt trái = Again • Bấm 🔊 để nghe phát âm (nếu trình duyệt hỗ trợ).
+        </div>
+      </div>
+    </section>
+
+    <!-- MODE 2: GÕ HÁN TỰ -->
+    <section id="mode2" class="mode">
+      <div class="mode-title">
+        2. Hiện nghĩa tiếng Việt → Gõ Hán tự
+        <span class="badge">Tập viết & nhớ mặt chữ</span>
+      </div>
+      <p class="mode-desc">
+        Máy sẽ cho nghĩa tiếng Việt của 1 từ trong 600 từ HSK3. Bạn gõ <b>Hán tự</b>, hệ thống sẽ báo đúng / sai
+        và cho bạn xem đáp án chuẩn.
+      </p>
+
+      <div class="panel m1-row">
+        <div>
+          <div class="m1-label">Nghĩa tiếng Việt:</div>
+          <div id="m1-vn" class="m1-vn">...</div>
+          <div id="m1-pinyin" class="m1-pinyin"></div>
+        </div>
+
+        <div class="m1-input-wrap">
+          <label for="m1-input" class="m1-label">Gõ Hán tự tương ứng:</label>
+          <input id="m1-input" autocomplete="off" placeholder="Ví dụ: 爱, 帮忙, 影响..." />
+        </div>
+
+        <div class="m1-actions">
+          <button id="m1-check" class="btn-main">
+            ✅ Kiểm tra
+          </button>
+          <button id="m1-show" class="btn-ghost">
+            👀 Xem đáp án
+          </button>
+          <button id="m1-next" class="btn-ghost">
+            ▶️ Từ tiếp theo
+          </button>
+        </div>
+
+        <div id="m1-feedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- MODE 3: ĐIỀN TỪ VÀO CÂU -->
+    <section id="mode3" class="mode">
+      <div class="mode-title">
+        3. Chọn từ phù hợp cho câu (Điền trống)
+        <span class="badge">Đặt từ trong ngữ cảnh</span>
+      </div>
+      <p class="mode-desc">
+        Chọn từ phù hợp để điền vào chỗ trống. Câu ví dụ lấy từ ví dụ của từ đó, kèm câu tiếng Việt gợi ý.
+      </p>
+
+      <div class="panel">
+        <div id="m2-sentence" class="m2-sentence">...</div>
+        <div id="m2-vn" class="m2-vn"></div>
+
+        <div id="m2-options" class="m2-options"></div>
+
+        <div class="m2-bottom">
+          <small>Gợi ý: đọc kỹ nghĩa tiếng Việt, đoán loại từ rồi hãy chọn.</small>
+          <button id="m2-next" class="btn-main">▶️ Câu khác</button>
+        </div>
+
+        <div id="m2-feedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- MODE 4 – TỔNG HỢP 40 ĐIỂM NGỮ PHÁP -->
+    <section id="mode4" class="mode">
+
+      <!-- =================================
+           I. CẤU TRÚC CÂU CƠ BẢN (1–4)
+      ================================== -->
+      <div class="section-heading" id="sec1">
+        <div class="section-tag">I</div>
+        <div class="section-title">CẤU TRÚC CÂU CƠ BẢN</div>
+      </div>
+
+      <div class="cards-grid">
+        <!-- 1 -->
+        <div class="card" id="g1">
+          <div class="card-number">01</div>
+          <div class="card-title">Trật tự câu tiếng Trung</div>
+          <div class="card-body">
+            <p><strong>Công thức chuẩn:</strong><br>
+              Chủ ngữ + Trạng ngữ (thời gian/địa điểm/cách thức) + Động từ + Tân ngữ
+            </p>
+            <p>Giải thích: Trạng ngữ (khi nào, ở đâu, bằng cách nào) luôn đặt trước động từ.</p>
+            <ul class="examples">
+              <li><span class="cn">我 明天 去 北京。</span> – Ngày mai tôi đi Bắc Kinh.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="card" id="g2">
+          <div class="card-number">02</div>
+          <div class="card-title">Định ngữ [Danh từ/Đại từ/Tính từ] + 的 + Danh từ</div>
+          <div class="card-body">
+            <p>Dùng <span class="cn">“的”</span> để bổ nghĩa cho danh từ.</p>Sau <span class="cn">“的”</span> dịch trước, trước <span class="cn">“的”</span> dịch sau.<p> 
+            <ul class="examples">
+              <li><span class="cn">漂亮 的 衣服</span> – quần áo đẹp</li>
+              <li><span class="cn">我买 的 书</span> – cuốn sách mà tôi mua</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="card" id="g3">
+          <div class="card-number">03</div>
+          <div class="card-title">Trạng thái tiếp diễn: V + 着</div>
+          <div class="card-body">
+            <p>Dùng để miêu tả trạng thái đang tồn tại, <strong>không nhấn mạnh thời gian</strong>.</p>
+            <ul class="examples">
+              <li><span class="cn">门开 着。</span> – Cửa đang mở.</li>
+              <li><span class="cn">他笑 着 说。</span> – Anh ấy cười rồi nói.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="card" id="g4">
+          <div class="card-number">04</div>
+          <div class="card-title">Trợ từ 了</div>
+          <div class="card-body">
+            <p><strong>(A) 了1 – hành động đã xảy ra</strong></p>
+            <ul class="examples">
+              <li><span class="cn">我吃 了 饭。</span></li>
+            </ul>
+            <p><strong>(B) 了2 – thay đổi trạng thái</strong></p>
+            <ul class="examples">
+              <li><span class="cn">下雨 了。</span> – Trời mưa rồi (trước đó không mưa).</li>
+            </ul>
+          </div>
+        </div>
+      </div> <!-- hết I -->
+
+
+      <!-- =================================
+           II. BỔ NGỮ – TRỌNG TÂM HSK3 (5–8)
+      ================================== -->
+      <div class="section-heading" id="sec2">
+        <div class="section-tag">II</div>
+        <div class="section-title">BỔ NGỮ – TRỌNG TÂM CỦA HSK3</div>
+      </div>
+
+      <div class="cards-grid">
+        <!-- 5 -->
+        <div class="card" id="g5">
+          <div class="card-number">05</div>
+          <div class="card-title">Bổ ngữ trình độ: V + 得 + Adj</div>
+          <div class="card-body">
+            <p>Giải thích: mô tả <strong>mức độ, cách thức</strong> của hành động.</p>
+            <ul class="examples">
+              <li><span class="cn">他说 得 很快。</span> – Anh ấy nói rất nhanh.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="card" id="g6">
+          <div class="card-number">06</div>
+          <div class="card-title">Bổ ngữ khả năng: V + 得/不 + Complement</div>
+          <div class="card-body">
+            <p>Giải thích: nói có thể làm được hay không.</p>
+            <ul class="examples">
+              <li><span class="cn">听 得 懂 / 听 不 懂</span> – nghe hiểu / không hiểu</li>
+              <li><span class="cn">走 得 快 / 走 不 快</span> – đi nhanh được / không nhanh được</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="card" id="g7">
+          <div class="card-number">07</div>
+          <div class="card-title">Bổ ngữ kết quả: 完 / 好 / 到 / 见 / 懂 / 清楚</div>
+          <div class="card-body">
+            <p>Giải thích: diễn tả <strong>kết quả cuối cùng</strong> của hành động.</p>
+            <ul class="examples">
+              <li><span class="cn">做 完 了</span> – làm xong</li>
+              <li><span class="cn">看 懂 了</span> – xem và hiểu rồi</li>
+              <li><span class="cn">找 到 了</span> – tìm thấy rồi</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="card" id="g8">
+          <div class="card-number">08</div>
+          <div class="card-title">Hành động tiếp diễn: V + 下去</div>
+          <div class="card-body">
+            <p>Nghĩa: <strong>Tiếp tục làm…</strong></p>
+            <ul class="examples">
+              <li><span class="cn">坚持 下去！</span> – Hãy tiếp tục kiên trì!</li>
+            </ul>
+          </div>
+        </div>
+      </div> <!-- hết II -->
+
+
+      <!-- =================================
+           III. CẤU TRÚC SO SÁNH (9–12)
+      ================================== -->
+      <div class="section-heading" id="sec3">
+        <div class="section-tag">III</div>
+        <div class="section-title">CẤU TRÚC SO SÁNH</div>
+      </div>
+
+      <div class="cards-grid">
+        <!-- 9 -->
+        <div class="card" id="g9">
+          <div class="card-number">09</div>
+          <div class="card-title">A 比 B + Adj (so sánh hơn)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">今天 比 昨天 冷。</span> – Hôm nay lạnh hơn hôm qua.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="card" id="g10">
+          <div class="card-number">10</div>
+          <div class="card-title">So sánh mức độ: 更 / 比较</div>
+          <div class="card-body">
+            <p><strong>Giải thích:</strong></p>
+            <ul class="examples">
+              <li><span class="cn">更</span> = hơn, càng</li>
+              <li><span class="cn">比较</span> = khá/ tương đối</li>
+            </ul>
+            <ul class="examples">
+              <li><span class="cn">这个 更 好。</span> – Cái này tốt hơn.</li>
+              <li><span class="cn">我 比较 忙。</span> – Tôi khá/ tương đối bận.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="card" id="g11">
+          <div class="card-number">11</div>
+          <div class="card-title">又…又… (vừa… vừa…)</div>
+          <div class="card-body">
+            <p>Miêu tả 2 đặc điểm cùng tồn tại.</p>
+            <ul class="examples">
+              <li><span class="cn">她 又 聪明 又 努力。</span> – Cô ấy vừa thông minh vừa chăm chỉ.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="card" id="g12">
+          <div class="card-number">12</div>
+          <div class="card-title">越来越… (càng ngày càng…)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">天气 越来越 热。</span> – Thời tiết càng ngày càng nóng.</li>
+            </ul>
+          </div>
+        </div>
+      </div> <!-- hết III -->
+
+
+      <!-- =================================
+           IV. TRẠNG TỪ & THÁI ĐỘ (13–17)
+      ================================== -->
+      <div class="section-heading" id="sec4">
+        <div class="section-tag">IV</div>
+        <div class="section-title">TRẠNG TỪ & THÁI ĐỘ</div>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- 13 -->
+        <div class="card" id="g13">
+          <div class="card-number">13</div>
+          <div class="card-title">有点儿 (hơi… – sắc thái tiêu cực nhẹ)</div>
+          <div class="card-body">
+            <p>Dùng khi người nói cảm thấy hơi khó chịu / không hài lòng.</p>
+            <ul class="examples">
+              <li><span class="cn">有点儿贵。</span> – Hơi đắt.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="card" id="g14">
+          <div class="card-number">14</div>
+          <div class="card-title">一点儿 (một chút – trung tính)</div>
+          <div class="card-body">
+            <p>Dùng khi yêu cầu, so sánh, miêu tả mức độ nhẹ.</p>
+            <ul class="examples">
+              <li><span class="cn">便宜一点儿。</span> – Rẻ một chút.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="card" id="g15">
+          <div class="card-number">15</div>
+          <div class="card-title">还是 (nên…)</div>
+          <div class="card-body">
+            <p>Dùng để đưa ra lời khuyên nhẹ nhàng.</p>
+            <ul class="examples">
+              <li><span class="cn">你还是休息一下吧。</span> – Bạn nên nghỉ một chút.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 16 -->
+        <div class="card" id="g16">
+          <div class="card-number">16</div>
+          <div class="card-title">又 vs 再</div>
+          <div class="card-body">
+            <p><strong>又</strong> → lặp lại trong quá khứ.<br>
+               <strong>再</strong> → lặp lại trong tương lai.</p>
+            <ul class="examples">
+              <li><span class="cn">他昨天又迟到。</span> – Hôm qua anh ấy lại đến muộn.</li>
+              <li><span class="cn">明天再来。</span> – Ngày mai lại đến.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 17 -->
+        <div class="card" id="g17">
+          <div class="card-number">17</div>
+          <div class="card-title">再…也… (cho dù… vẫn…)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">再忙也要吃饭。</span> – Dù bận đến mấy cũng phải ăn.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div> <!-- END IV -->
+
+
+      <!-- =================================
+           V. LIÊN TỪ (18–22)
+      ================================== -->
+      <div class="section-heading" id="sec5">
+        <div class="section-tag">V</div>
+        <div class="section-title">LIÊN TỪ – KẾT CẤU CÂU</div>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- 18 -->
+        <div class="card" id="g18">
+          <div class="card-number">18</div>
+          <div class="card-title">虽然…但是… (tuy… nhưng…)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">虽然很累，但是很开心。</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 19 -->
+        <div class="card" id="g19">
+          <div class="card-number">19</div>
+          <div class="card-title">因为…所以… (vì… nên…)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">因为下雨，所以没去。</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 20 -->
+        <div class="card" id="g20">
+          <div class="card-number">20</div>
+          <div class="card-title">一…就… (hễ… là…)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">我一回家就睡觉。</span> – Tôi hễ về đến nhà là đi ngủ.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 21 -->
+        <div class="card" id="g21">
+          <div class="card-number">21</div>
+          <div class="card-title">先…再… (trước… sau…)</div>
+          <div class="card-body">
+            <p>Dùng chỉ thứ tự hành động.</p>
+            <ul class="examples">
+              <li><span class="cn">先吃饭，再工作。</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 22 -->
+        <div class="card" id="g22">
+          <div class="card-number">22</div>
+          <div class="card-title">不但…而且… (không chỉ… mà còn…)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">他不但会说中文，而且说得很好。</span></li>
+            </ul>
+          </div>
+        </div>
+
+      </div> <!-- END V -->
+
+
+      <!-- =================================
+           VI. CÂU HỎI & PHỦ ĐỊNH (23–27)
+      ================================== -->
+      <div class="section-heading" id="sec6">
+        <div class="section-tag">VI</div>
+        <div class="section-title">CÂU HỎI & PHỦ ĐỊNH</div>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- 23 -->
+        <div class="card" id="g23">
+          <div class="card-number">23</div>
+          <div class="card-title">A 还是 B？ (câu hỏi lựa chọn)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">你喝茶 还是 咖啡？</span> – Bạn uống trà hay cà phê?</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 24 (SỬA THEO PDF) -->
+        <div class="card" id="g24">
+          <div class="card-number">24</div>
+          <div class="card-title">呢 (dùng để hỏi tiếp nối)</div>
+          <div class="card-body">
+            <p>Dùng khi hỏi lại thông tin tương ứng, tiếp nối chủ đề.</p>
+            <ul class="examples">
+              <li><span class="cn">我在看书，你呢？</span> – Tôi đang đọc sách, còn bạn?</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 25 -->
+        <div class="card" id="g25">
+          <div class="card-number">25</div>
+          <div class="card-title">吧 (trợ từ ngữ khí)</div>
+          <div class="card-body">
+            <p>Làm mềm câu, biểu thị gợi ý nhẹ nhàng.</p>
+            <ul class="examples">
+              <li><span class="cn">我们走吧。</span> – Chúng ta đi thôi.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 26 -->
+        <div class="card" id="g26">
+          <div class="card-number">26</div>
+          <div class="card-title">没 vs 不 (phủ định)</div>
+          <div class="card-body">
+            <p><strong>没</strong> → hành động chưa xảy ra<br>
+               <strong>不</strong> → phủ định thói quen, sự thật</p>
+            <ul class="examples">
+              <li><span class="cn">我没吃。</span> – Tôi chưa ăn.</li>
+              <li><span class="cn">我不吃鱼。</span> – Tôi không ăn cá (thói quen).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 27 -->
+        <div class="card" id="g27">
+          <div class="card-number">27</div>
+          <div class="card-title">还是没… (vẫn chưa…)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">我还是没明白。</span> – Tôi vẫn chưa hiểu.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div> <!-- END VI -->
+
+
+      <!-- =================================
+           VII. TỪ LOẠI ĐẶC BIỆT (28–32)
+      ================================== -->
+      <div class="section-heading" id="sec7">
+        <div class="section-tag">VII</div>
+        <div class="section-title">TỪ LOẠI ĐẶC BIỆT</div>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- 28 -->
+        <div class="card" id="g28">
+          <div class="card-number">28</div>
+          <div class="card-title">Năng nguyện động từ: 会 / 能 / 可以</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">我会说中文。</span> – Tôi biết nói tiếng Trung.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 29 -->
+        <div class="card" id="g29">
+          <div class="card-number">29</div>
+          <div class="card-title">Động từ li hợp</div>
+          <div class="card-body">
+            <p>Ví dụ: <span class="cn">见面、休息、帮忙、聊天</span>…</p>
+            <ul class="examples">
+              <li><span class="cn">我们明天见面。</span> – Ngày mai chúng ta gặp nhau.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 30 -->
+        <div class="card" id="g30">
+          <div class="card-number">30</div>
+          <div class="card-title">已经 / 还是</div>
+          <div class="card-body">
+            <p><span class="cn">已经</span> = đã<br>
+               <span class="cn">还是</span> = vẫn</p>
+            <ul class="examples">
+              <li><span class="cn">我已经知道了。</span> – Tôi biết rồi.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 31 -->
+        <div class="card" id="g31">
+          <div class="card-number">31</div>
+          <div class="card-title">对…来说 (đối với… mà nói)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">对我来说，这很重要。</span> – Đối với tôi, điều này rất quan trọng.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 32 -->
+        <div class="card" id="g32">
+          <div class="card-number">32</div>
+          <div class="card-title">对…感兴趣 (có hứng thú với…)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">我对音乐很感兴趣。</span> – Tôi rất thích âm nhạc.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div> <!-- END VII -->
+
+
+      <!-- =================================
+           VIII. THỜI GIAN – TẦN SUẤT (33–36)
+      ================================== -->
+      <div class="section-heading" id="sec8">
+        <div class="section-tag">VIII</div>
+        <div class="section-title">THỜI GIAN – TẦN SUẤT</div>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- 33 -->
+        <div class="card" id="g33">
+          <div class="card-number">33</div>
+          <div class="card-title">每…都… (mỗi… đều…)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">我每天都学习。</span> – Mỗi ngày tôi đều học.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 34 -->
+        <div class="card" id="g34">
+          <div class="card-number">34</div>
+          <div class="card-title">V + 了 + khoảng thời gian</div>
+          <div class="card-body">
+            <p>Dùng để diễn tả <strong>thời lượng hành động</strong>.</p>
+            <ul class="examples">
+              <li><span class="cn">我学了三年汉语。</span> – Tôi đã học tiếng Trung 3 năm.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 35 -->
+        <div class="card" id="g35">
+          <div class="card-number">35</div>
+          <div class="card-title">在 + nơi / thời điểm</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">我在学校学习。</span> – Tôi học ở trường.</li>
+              <li><span class="cn">在八点上课。</span> – 8 giờ lên lớp.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 36 – SỬA LẠI THEO PDF -->
+        <div class="card" id="g36">
+          <div class="card-number">36</div>
+          <div class="card-title">Cách nói ước lượng (差不多 / 大概 / 约)</div>
+          <div class="card-body">
+            <p>PDF gốc dùng 3 mẫu: <span class="cn">差不多、大概、约</span></p>
+            <ul class="examples">
+              <li><span class="cn">差不多五十块。</span> – Khoảng 50 tệ.</li>
+              <li><span class="cn">大概三点。</span> – Đại khái khoảng 3 giờ.</li>
+              <li><span class="cn">约二十公里。</span> – Khoảng 20 km.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div> <!-- END VIII -->
+
+
+      <!-- =================================
+           IX. CÂU BỊ ĐỘNG (37)
+      ================================== -->
+      <div class="section-heading" id="sec9">
+        <div class="section-tag">IX</div>
+        <div class="section-title">CẤU TRÚC BỊ ĐỘNG</div>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- 37 -->
+        <div class="card" id="g37">
+          <div class="card-number">37</div>
+          <div class="card-title">被 (bị)</div>
+          <div class="card-body">
+            <p>Công thức:</p>
+            <p><strong>A + 被 + B + Động từ</strong></p>
+            <ul class="examples">
+              <li><span class="cn">我的手机被偷了。</span> – Điện thoại của tôi bị trộm mất.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div> <!-- END IX -->
+
+
+      <!-- =================================
+           X. MẪU CÂU THƯỜNG DÙNG (38–40)
+      ================================== -->
+      <div class="section-heading" id="sec10">
+        <div class="section-tag">X</div>
+        <div class="section-title">MẪU CÂU THƯỜNG DÙNG</div>
+      </div>
+
+      <div class="cards-grid">
+
+        <!-- 38 – CHỈNH THEO PDF -->
+        <div class="card" id="g38">
+          <div class="card-number">38</div>
+          <div class="card-title">还是…吧 (đề xuất sau khi cân nhắc)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">我们还是坐出租车吧。</span> – Chúng ta vẫn nên đi taxi thì hơn.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 39 – CHỈNH THEO PDF -->
+        <div class="card" id="g39">
+          <div class="card-number">39</div>
+          <div class="card-title">把字句 (把 + O + V + 完/好…)</div>
+          <div class="card-body">
+            <p>Dùng để nhấn mạnh “xử lý / làm gì với tân ngữ”.</p>
+            <ul class="examples">
+              <li><span class="cn">把门关上。</span> – Đóng cửa lại.</li>
+              <li><span class="cn">把作业做完。</span> – Làm xong bài tập.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 40 -->
+        <div class="card" id="g40">
+          <div class="card-number">40</div>
+          <div class="card-title">她说她… (câu tường thuật)</div>
+          <div class="card-body">
+            <ul class="examples">
+              <li><span class="cn">她说她喜欢我。</span> – Cô ấy nói cô ấy thích tôi.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div> <!-- END X -->
+
+    </section>
+
+    <!-- Nguồn nổi bật toàn trang -->
+    <div class="source-footer">
+      Nguồn: Phạm Trần Phương Hoa – Liên hệ học: 0383991743 (Zalo)
+      <small>HSK3 Vocabulary (Official List)</small>
+    </div>
+
+  </div><!-- /.page -->
+
+  <script>
+    /* ---------------------------------------------------
+       1. DỮ LIỆU 600 TỪ VỰNG (cards = [...])
+
+       👉 Hãy dán FULL 600 từ của bạn vào đây nếu cần.
+       Format mỗi từ:
+       {hanzi:"爱", pinyin:"ài", vn:"yêu", example:"我爱你。\nWǒ ài nǐ.\nTôi yêu bạn."}
+    --------------------------------------------------- */
+
+    const cards = [
+      {hanzi: "爱", pinyin: "ài", vn: "yêu", example: "我爱你。\nWǒ ài nǐ.\nTôi yêu bạn."},
+  {hanzi: "八", pinyin: "bā", vn: "tám", example: "今天八点。\nJīntiān bā diǎn.\nHôm nay tám giờ."},
+  {hanzi: "爸爸", pinyin: "bàba", vn: "bố, ba", example: "我爸爸是医生。\nWǒ bàba shì yīshēng.\nBố tôi là bác sĩ."},
+  {hanzi: "杯子", pinyin: "bēizi", vn: "cốc, ly", example: "杯子里有茶。\nBēizi lǐ yǒu chá.\nTrong cốc có trà."},
+  {hanzi: "北京", pinyin: "Běijīng", vn: "Bắc Kinh", example: "我住在北京。\nWǒ zhù zài Běijīng.\nTôi sống ở Bắc Kinh."},
+  {hanzi: "本", pinyin: "běn", vn: "(lượng từ của sách: cuốn/quyển)", example: "桌子上有一本书。\nZhuōzi shàng yǒu yī běn shū.\nTrên bàn có một quyển sách."},
+  {hanzi: "不客气", pinyin: "bú kèqi", vn: "không có gì (You're welcome)", example: "甲：谢谢你！乙：不客气。\nJiǎ: Xièxie nǐ! Yǐ: Bú kèqi.\nA: Cảm ơn. B: Không có gì."},
+  {hanzi: "不", pinyin: "bù", vn: "không", example: "我不是学生。\nWǒ bú shì xuéshēng.\nTôi không phải là học sinh."},
+  {hanzi: "菜", pinyin: "cài", vn: "rau / món ăn", example: "我去超市买菜。\nWǒ qù chāoshì mǎi cài.\nTôi đi chợ mua rau/món."},
+  {hanzi: "茶", pinyin: "chá", vn: "trà", example: "请喝杯茶吧。\nQǐng hē yī bēi chá ba.\nMời uống một cốc trà."},
+  {hanzi: "吃", pinyin: "chī", vn: "ăn", example: "请吃点儿米饭。\nQǐng chī diǎnr mǐfàn.\nMời ăn một chút cơm."},
+  {hanzi: "出租车", pinyin: "chūzūchē", vn: "taxi", example: "我们坐出租车去火车站。\nWǒmen zuò chūzūchē qù huǒchēzhàn.\nChúng tôi đi taxi đến nhà ga."},
+  {hanzi: "打电话", pinyin: "dǎ diànhuà", vn: "gọi điện thoại", example: "他在打电话呢。\nTā zài dǎ diànhuà ne.\nAnh ấy đang gọi điện."},
+  {hanzi: "大", pinyin: "dà", vn: "to, lớn", example: "这个苹果很大。\nZhège píngguǒ hěn dà.\nQuả táo này rất to."},
+  {hanzi: "的", pinyin: "de", vn: "(trợ từ sở hữu/chỉ định)", example: "这是我的书。\nZhè shì wǒ de shū.\nĐây là sách của tôi."},
+  {hanzi: "点", pinyin: "diǎn", vn: "giờ (o'clock)", example: "现在是下午3点。\nXiànzài shì xiàwǔ sān diǎn.\nBây giờ là 3 giờ chiều."},
+  {hanzi: "电脑", pinyin: "diànnǎo", vn: "máy tính", example: "我买了个电脑。\nWǒ mǎi le gè diànnǎo.\nTôi mua một cái máy tính."},
+  {hanzi: "电视", pinyin: "diànshì", vn: "ti vi", example: "妈妈在看电视。\nMāma zài kàn diànshì.\nMẹ đang xem TV."},
+  {hanzi: "电影", pinyin: "diànyǐng", vn: "phim", example: "我喜欢看电影。\nWǒ xǐhuan kàn diànyǐng.\nTôi thích xem phim."},
+  {hanzi: "东西", pinyin: "dōngxi", vn: "đồ, vật", example: "我在商店买了很多东西。\nWǒ zài shāngdiàn mǎi le hěn duō dōngxi.\nTôi đã mua nhiều đồ ở cửa hàng."},
+  {hanzi: "都", pinyin: "dōu", vn: "đều", example: "我们都来了。\nWǒmen dōu lái le.\nChúng tôi đều đã đến."},
+  {hanzi: "读", pinyin: "dú", vn: "đọc", example: "你会读这个汉字吗？\nNǐ huì dú zhège hànzì ma?\nBạn có đọc được chữ Hán này không?" },
+  {hanzi: "对不起", pinyin: "duìbuqǐ", vn: "xin lỗi", example: "甲：对不起。乙：没关系。\nJiǎ: Duìbuqǐ. Yǐ: Méi guānxi.\nA: Xin lỗi. B: Không sao."},
+  {hanzi: "多", pinyin: "duō", vn: "nhiều", example: "这里的人很多。\nZhèlǐ de rén hěn duō.\nỞ đây có rất nhiều người."},
+  {hanzi: "多少", pinyin: "duōshao", vn: "bao nhiêu", example: "你们学校有多少学生？\nNǐmen xuéxiào yǒu duōshao xuéshēng?\nTrường các bạn có bao nhiêu học sinh?" },
+  {hanzi: "儿子", pinyin: "érzi", vn: "con trai", example: "我儿子三岁了。\nWǒ érzi sān suì le.\nCon trai tôi 3 tuổi rồi."},
+  {hanzi: "二", pinyin: "èr", vn: "hai", example: "现在十二点了。\nXiànzài shí èr diǎn le.\nBây giờ là 12 giờ."},
+  {hanzi: "饭店", pinyin: "fàndiàn", vn: "nhà hàng / khách sạn", example: "中午我们去饭店吃吧。\nZhōngwǔ wǒmen qù fàndiàn chī ba.\nBuổi trưa chúng ta đi ăn ở nhà hàng nhé."},
+  {hanzi: "飞机", pinyin: "fēijī", vn: "máy bay", example: "我坐飞机去北京。\nWǒ zuò fēijī qù Běijīng.\nTôi đi Bắc Kinh bằng máy bay."},
+  {hanzi: "分钟", pinyin: "fēnzhōng", vn: "phút", example: "我想休息几分钟。\nWǒ xiǎng xiūxi jǐ fēnzhōng.\nTôi muốn nghỉ vài phút."},
+  {hanzi: "高兴", pinyin: "gāoxìng", vn: "vui mừng", example: "今天我很高兴。\nJīntiān wǒ hěn gāoxìng.\nHôm nay tôi rất vui."},
+  {hanzi: "个", pinyin: "gè", vn: "(lượng từ chung)", example: "我是一个学生。\nWǒ shì yí gè xuéshēng.\nTôi là một học sinh."},
+  {hanzi: "工作", pinyin: "gōngzuò", vn: "công việc / làm việc", example: "我很喜欢现在的工作。\nWǒ hěn xǐhuan xiànzài de gōngzuò.\nTôi rất thích công việc hiện tại."},
+  {hanzi: "汉语", pinyin: "Hànyǔ", vn: "tiếng Hán", example: "他在学习汉语。\nTā zài xuéxí Hànyǔ.\nAnh ấy đang học tiếng Trung."},
+  {hanzi: "好", pinyin: "hǎo", vn: "tốt", example: "今天天气很好。\nJīntiān tiānqì hěn hǎo.\nThời tiết hôm nay tốt."},
+  {hanzi: "号", pinyin: "hào", vn: "ngày / số", example: "今天是1号。\nJīntiān shì yī hào.\nHôm nay là ngày 1."},
+  {hanzi: "喝", pinyin: "hē", vn: "uống", example: "我想喝水。\nWǒ xiǎng hē shuǐ.\nTôi muốn uống nước."},
+  {hanzi: "和", pinyin: "hé", vn: "và / cùng", example: "爸爸和妈妈都在家。\nBàba hé māma dōu zài jiā.\nBố và mẹ đều ở nhà."},
+  {hanzi: "很", pinyin: "hěn", vn: "rất", example: "李小姐很漂亮。\nLǐ xiǎojiě hěn piàoliang.\nCô Lý rất xinh."},
+  {hanzi: "后面", pinyin: "hòumiàn", vn: "phía sau", example: "商店在学校后面。\nShāngdiàn zài xuéxiào hòumiàn.\nCửa hàng ở phía sau trường."},
+  {hanzi: "回", pinyin: "huí", vn: "trở về", example: "我八点回家。\nWǒ bā diǎn huí jiā.\nTôi về nhà lúc 8 giờ."},
+  {hanzi: "会", pinyin: "huì", vn: "có thể / biết (làm được)", example: "我会开车。\nWǒ huì kāichē.\nTôi biết lái xe."},
+  {hanzi: "几", pinyin: "jǐ", vn: "mấy, vài", example: "你有几个儿子？\nNǐ yǒu jǐ gè érzi?\nBạn có mấy con trai?" },
+  {hanzi: "家", pinyin: "jiā", vn: "nhà, gia đình", example: "我家在北京。\nWǒ jiā zài Běijīng.\nNhà tôi ở Bắc Kinh."},
+  {hanzi: "叫", pinyin: "jiào", vn: "gọi (tên)", example: "我的名字叫李明。\nWǒ de míngzi jiào Lǐ Míng.\nTên tôi là Lý Minh."},
+  {hanzi: "今天", pinyin: "jīntiān", vn: "hôm nay", example: "我今天去北京。\nWǒ jīntiān qù Běijīng.\nHôm nay tôi đi Bắc Kinh."},
+  {hanzi: "九", pinyin: "jiǔ", vn: "chín", example: "今天是九月。\nJīntiān shì jiǔ yuè.\nHôm nay là tháng 9."},
+  {hanzi: "开", pinyin: "kāi", vn: "lái (xe) / mở", example: "我开车去公司。\nWǒ kāi chē qù gōngsī.\nTôi lái xe đi công ty."},
+  {hanzi: "看", pinyin: "kàn", vn: "nhìn, xem", example: "你看，那本书在桌子上。\nNǐ kàn, nà běn shū zài zhuōzi shàng.\nBạn nhìn kìa, quyển sách ở trên bàn."},
+  {hanzi: "看见", pinyin: "kànjiàn", vn: "thấy", example: "我没看见他。\nWǒ méi kànjiàn tā.\nTôi không thấy anh ấy."},
+ {hanzi: "块", pinyin: "kuài", vn: "đồng (tiền);<br>miếng/khối (lượng từ)", example: "这本书三十块钱。\nZhè běn shū sānshí kuài qián。\nQuyển sách này 30 đồng。\n\n这块蛋糕很好吃。\nZhè kuài dàngāo hěn hǎo chī。\nMiếng bánh này rất ngon。"},
+  {hanzi: "来", pinyin: "lái", vn: "đến", example: "他是昨天来这儿的。\nTā shì zuótiān lái zhèr de.\nAnh ấy đến đây ngày hôm qua."},
+  {hanzi: "老师", pinyin: "lǎoshī", vn: "giáo viên", example: "他就是我们的汉语老师。\nTā jiù shì wǒmen de Hànyǔ lǎoshī.\nNgài ấy là giáo viên tiếng Trung của chúng tôi."},
+  {hanzi: "了", pinyin: "le", vn: "(trợ từ hoàn thành/đổi trạng thái)", example: "昨天下雨了。\nZuótiān xià yǔ le.\nHôm qua đã mưa rồi."},
+  {hanzi: "冷", pinyin: "lěng", vn: "lạnh", example: "今天太冷了。\nJīntiān tài lěng le.\nHôm nay quá lạnh."},
+  {hanzi: "里", pinyin: "lǐ", vn: "trong (inside)", example: "我们都在学校里。\nWǒmen dōu zài xuéxiào lǐ.\nChúng tôi đều ở trong trường."},
+  {hanzi: "零", pinyin: "líng", vn: "số không", example: "今年是一零一一年。\nJīnnián shì yī líng yī yī nián.\nNăm nay là 1011 (ví dụ)."},
+  {hanzi: "六", pinyin: "liù", vn: "sáu", example: "桌子上有六个杯子。\nZhuōzi shàng yǒu liù gè bēizi.\nTrên bàn có sáu cái cốc."},
+  {hanzi: "妈妈", pinyin: "māma", vn: "mẹ", example: "我妈妈不在家。\nWǒ māma bú zài jiā.\nMẹ tôi không có ở nhà."},
+  {hanzi: "吗", pinyin: "ma", vn: "(trợ từ nghi vấn)", example: "你是中国人吗？\nNǐ shì Zhōngguó rén ma?\nBạn là người Trung Quốc phải không?"},
+  {hanzi: "马", pinyin: "mǎ", vn: "ngựa", example: "他有一匹马。\nTā yǒu yī pǐ mǎ.\nAnh ấy có một con ngựa."},
+  {hanzi: "买", pinyin: "mǎi", vn: "mua", example: "我想买一件衣服。\nWǒ xiǎng mǎi yī jiàn yīfu.\nTôi muốn mua một cái áo."},
+  {hanzi: "慢", pinyin: "màn", vn: "chậm", example: "你走得太慢了。\nNǐ zǒu de tài màn le.\nBạn đi quá chậm rồi."},
+  {hanzi: "忙", pinyin: "máng", vn: "bận", example: "我最近很忙。\nWǒ zuìjìn hěn máng.\nDạo này tôi rất bận."},
+  {hanzi: "猫", pinyin: "māo", vn: "mèo", example: "这只猫很可爱。\nZhè zhī māo hěn kě’ài.\nCon mèo này rất dễ thương."},
+  {hanzi: "没", pinyin: "méi", vn: "không có / chưa", example: "我没钱。\nWǒ méi qián.\nTôi không có tiền."},
+  {hanzi: "没关系", pinyin: "méiguānxi", vn: "không sao", example: "甲：对不起！乙：没关系。\nJiǎ: Duìbuqǐ! Yǐ: Méiguānxi.\nA: Xin lỗi! B: Không sao."},
+  {hanzi: "米饭", pinyin: "mǐfàn", vn: "cơm", example: "我喜欢吃米饭。\nWǒ xǐhuan chī mǐfàn.\nTôi thích ăn cơm."},
+  {hanzi: "明天", pinyin: "míngtiān", vn: "ngày mai", example: "明天见！\nMíngtiān jiàn!\nHẹn gặp ngày mai!"},
+  {hanzi: "名字", pinyin: "míngzi", vn: "tên", example: "你的名字是什么？\nNǐ de míngzi shì shénme?\nTên bạn là gì?"},
+  {hanzi: "哪", pinyin: "nǎ", vn: "nào (which)", example: "你要哪本书？\nNǐ yào nǎ běn shū?\nBạn muốn quyển sách nào?"},
+  {hanzi: "哪儿", pinyin: "nǎr", vn: "ở đâu", example: "你去哪儿？\nNǐ qù nǎr?\nBạn đi đâu?"},
+  {hanzi: "那", pinyin: "nà", vn: "kia, đó", example: "那是我同学。\nNà shì wǒ tóngxué.\nĐó là bạn học của tôi."},
+  {hanzi: "呢", pinyin: "ne", vn: "(trợ từ nghi vấn để hỏi lại, ex: ...thì sao?)", example: "你呢？\nNǐ ne?\nCòn bạn thì sao?"},
+  {hanzi: "能", pinyin: "néng", vn: "có thể", example: "我能帮你吗？\nWǒ néng bāng nǐ ma?\nTôi có thể giúp bạn không?"},
+  {hanzi: "你", pinyin: "nǐ", vn: "bạn", example: "你好吗？\nNǐ hǎo ma?\nBạn có khỏe không?"},
+  {hanzi: "年", pinyin: "nián", vn: "năm", example: "今年是2025年。\nJīnnián shì èr líng èr wǔ nián.\nNăm nay là 2025."},
+  {hanzi: "女儿", pinyin: "nǚ’ér", vn: "con gái", example: "我女儿很漂亮。\nWǒ nǚ’ér hěn piàoliang.\nCon gái tôi rất xinh."},
+  {hanzi: "朋友", pinyin: "péngyou", vn: "bạn bè", example: "我们是好朋友。\nWǒmen shì hǎo péngyou.\nChúng tôi là bạn tốt."},
+  {hanzi: "漂亮", pinyin: "piàoliang", vn: "xinh đẹp", example: "你的衣服真漂亮。\nNǐ de yīfu zhēn piàoliang.\nQuần áo của bạn thật đẹp."},
+  {hanzi: "苹果", pinyin: "píngguǒ", vn: "táo", example: "我买了几个苹果。\nWǒ mǎi le jǐ gè píngguǒ.\nTôi mua vài quả táo."},
+  {hanzi: "七", pinyin: "qī", vn: "bảy", example: "我有七个朋友。\nWǒ yǒu qī gè péngyou.\nTôi có bảy người bạn."},
+  {hanzi: "前面", pinyin: "qiánmiàn", vn: "phía trước", example: "学校在前面。\nXuéxiào zài qiánmiàn.\nTrường ở phía trước."},
+  {hanzi: "钱", pinyin: "qián", vn: "tiền", example: "他有很多钱。\nTā yǒu hěn duō qián.\nAnh ấy có nhiều tiền."},
+  {hanzi: "请", pinyin: "qǐng", vn: "mời / xin", example: "请进。\nQǐng jìn.\nMời vào."},
+  {hanzi: "去", pinyin: "qù", vn: "đi", example: "我去中国。\nWǒ qù Zhōngguó.\nTôi đi Trung Quốc."},
+  {hanzi: "热", pinyin: "rè", vn: "nóng", example: "今天很热。\nJīntiān hěn rè.\nHôm nay rất nóng."},
+  {hanzi: "人", pinyin: "rén", vn: "người", example: "这里有很多人。\nZhèlǐ yǒu hěn duō rén.\nỞ đây có nhiều người."},
+  {hanzi: "认识", pinyin: "rènshi", vn: "quen biết", example: "我认识他。\nWǒ rènshi tā.\nTôi quen anh ấy."},
+  {hanzi: "日", pinyin: "rì", vn: "ngày, mặt trời", example: "今天是几月几日？\nJīntiān shì jǐ yuè jǐ rì?\nHôm nay là ngày mấy?"},
+  {hanzi: "三", pinyin: "sān", vn: "ba", example: "我有三个姐姐。\nWǒ yǒu sān gè jiějie.\nTôi có ba chị gái."},
+  {hanzi: "商店", pinyin: "shāngdiàn", vn: "cửa hàng", example: "我去商店买东西。\nWǒ qù shāngdiàn mǎi dōngxi.\nTôi đi cửa hàng mua đồ."},
+  {hanzi: "上", pinyin: "shàng", vn: "trên, lên", example: "他在楼上。\nTā zài lóu shàng.\nAnh ấy ở trên lầu."},
+  {hanzi: "上午", pinyin: "shàngwǔ", vn: "buổi sáng", example: "上午我去上课。\nShàngwǔ wǒ qù shàngkè.\nBuổi sáng tôi đi học."},
+  {hanzi: "少", pinyin: "shǎo", vn: "ít", example: "这里人很少。\nZhèlǐ rén hěn shǎo.\nỞ đây ít người."},
+  {hanzi: "谁", pinyin: "shéi", vn: "ai", example: "那个人是谁？\nNà ge rén shì shéi?\nNgười kia là ai?"},
+  {hanzi: "什么", pinyin: "shénme", vn: "cái gì", example: "你在做什么？\nNǐ zài zuò shénme?\nBạn đang làm gì?"},
+  {hanzi: "十", pinyin: "shí", vn: "mười", example: "我有十块钱。\nWǒ yǒu shí kuài qián.\nTôi có mười đồng."},
+  {hanzi: "时候", pinyin: "shíhou", vn: "lúc, khi", example: "你什么时候去？\nNǐ shénme shíhou qù?\nBạn khi nào đi?"},
+  {hanzi: "是", pinyin: "shì", vn: "là", example: "我是学生。\nWǒ shì xuéshēng.\nTôi là học sinh."},
+  {hanzi: "书", pinyin: "shū", vn: "sách", example: "我喜欢看书。\nWǒ xǐhuan kàn shū.\nTôi thích đọc sách."},
+  {hanzi: "水", pinyin: "shuǐ", vn: "nước", example: "我想喝水。\nWǒ xiǎng hē shuǐ.\nTôi muốn uống nước."},
+  {hanzi: "水果", pinyin: "shuǐguǒ", vn: "hoa quả", example: "我买了一些水果。\nWǒ mǎi le yīxiē shuǐguǒ.\nTôi mua một ít hoa quả."},
+  {hanzi: "睡觉", pinyin: "shuìjiào", vn: "ngủ", example: "他在睡觉。\nTā zài shuìjiào.\nAnh ấy đang ngủ."},
+  {hanzi: "说", pinyin: "shuō", vn: "nói", example: "你在说什么？\nNǐ zài shuō shénme?\nBạn đang nói gì?"},
+  {hanzi: "四", pinyin: "sì", vn: "bốn", example: "我有四个苹果。\nWǒ yǒu sì gè píngguǒ.\nTôi có bốn quả táo."},
+  {hanzi: "岁", pinyin: "suì", vn: "tuổi", example: "我二十岁。\nWǒ èrshí suì.\nTôi 20 tuổi."},
+  {hanzi: "他", pinyin: "tā", vn: "anh ấy", example: "他是我的朋友。\nTā shì wǒ de péngyou.\nAnh ấy là bạn tôi."},
+  {hanzi: "她", pinyin: "tā", vn: "cô ấy", example: "她是我的老师。\nTā shì wǒ de lǎoshī.\nCô ấy là giáo viên của tôi."},
+  {hanzi: "太", pinyin: "tài", vn: "quá, rất", example: "太好了！\nTài hǎo le!\nTốt quá rồi!"},
+  {hanzi: "天气", pinyin: "tiānqì", vn: "thời tiết", example: "今天天气很好。\nJīntiān tiānqì hěn hǎo.\nThời tiết hôm nay rất tốt."},
+  {hanzi: "听", pinyin: "tīng", vn: "nghe", example: "请听我说。\nQǐng tīng wǒ shuō.\nXin hãy nghe tôi nói."},
+  {hanzi: "同学", pinyin: "tóngxué", vn: "bạn học", example: "他是我的同学。\nTā shì wǒ de tóngxué.\nAnh ấy là bạn học của tôi."},
+  {hanzi: "同事", pinyin: "tóngshì", vn: "đồng nghiệp", example: "我们是同事。\nWǒmen shì tóngshì.\nChúng tôi là đồng nghiệp."},
+  {hanzi: "图书馆", pinyin: "túshūguǎn", vn: "thư viện", example: "我去图书馆学习。\nWǒ qù túshūguǎn xuéxí.\nTôi đi thư viện học."},
+  {hanzi: "外面", pinyin: "wàimiàn", vn: "bên ngoài", example: "我在外面等你。\nWǒ zài wàimiàn děng nǐ.\nTôi đợi bạn ở bên ngoài."},
+  {hanzi: "玩", pinyin: "wán", vn: "chơi", example: "孩子们在玩。\nHáizimen zài wán.\nBọn trẻ đang chơi."},
+  {hanzi: "晚上", pinyin: "wǎnshàng", vn: "buổi tối", example: "晚上好！\nWǎnshàng hǎo!\nChào buổi tối!"},
+  {hanzi: "喂", pinyin: "wèi", vn: "alo / này (chào qua điện thoại)", example: "喂，你好！\nWèi, nǐ hǎo!\nAlo, xin chào!"},
+  {hanzi: "问", pinyin: "wèn", vn: "hỏi", example: "我可以问你一个问题吗？\nWǒ kěyǐ wèn nǐ yī gè wèntí ma?\nTôi có thể hỏi bạn một câu được không?"},
+  {hanzi: "我们", pinyin: "wǒmen", vn: "chúng tôi", example: "我们都是学生。\nWǒmen dōu shì xuéshēng.\nChúng tôi đều là học sinh."},
+  {hanzi: "我", pinyin: "wǒ", vn: "tôi", example: "我是越南人。\nWǒ shì Yuènán rén.\nTôi là người Việt Nam."},
+  {hanzi: "五", pinyin: "wǔ", vn: "năm", example: "我有五本书。\nWǒ yǒu wǔ běn shū.\nTôi có năm quyển sách."},
+  {hanzi: "喜欢", pinyin: "xǐhuan", vn: "thích", example: "我喜欢喝咖啡。\nWǒ xǐhuan hē kāfēi.\nTôi thích uống cà phê."},
+  {hanzi: "下", pinyin: "xià", vn: "dưới / xuống", example: "他在楼下。\nTā zài lóu xià.\nAnh ấy ở dưới lầu."},
+  {hanzi: "下午", pinyin: "xiàwǔ", vn: "buổi chiều", example: "下午我去公园。\nXiàwǔ wǒ qù gōngyuán.\nBuổi chiều tôi đi công viên."},
+  {hanzi: "下雨", pinyin: "xiàyǔ", vn: "mưa", example: "今天下雨了。\nJīntiān xiàyǔ le.\nHôm nay trời mưa rồi."},
+  {hanzi: "先生", pinyin: "xiānsheng", vn: "ông, ngài", example: "王先生在这儿。\nWáng xiānsheng zài zhèr.\nÔng Vương ở đây."},
+  {hanzi: "现在", pinyin: "xiànzài", vn: "bây giờ", example: "现在是九点。\nXiànzài shì jiǔ diǎn.\nBây giờ là 9 giờ."},
+  {hanzi: "想", pinyin: "xiǎng", vn: "muốn / nhớ", example: "我想吃米饭。\nWǒ xiǎng chī mǐfàn.\nTôi muốn ăn cơm."},
+  {hanzi: "小", pinyin: "xiǎo", vn: "nhỏ", example: "这个苹果很小。\nZhège píngguǒ hěn xiǎo.\nQuả táo này rất nhỏ."},
+  {hanzi: "小姐", pinyin: "xiǎojiě", vn: "tiểu thư / cô gái", example: "李小姐很漂亮。\nLǐ xiǎojiě hěn piàoliang.\nCô Lý rất xinh đẹp."},
+  {hanzi: "些", pinyin: "xiē", vn: "một vài", example: "我买了一些水果。\nWǒ mǎi le yīxiē shuǐguǒ.\nTôi mua một ít hoa quả."},
+  {hanzi: "写", pinyin: "xiě", vn: "viết", example: "我写汉字。\nWǒ xiě hànzì.\nTôi viết chữ Hán."},
+  {hanzi: "谢谢", pinyin: "xièxie", vn: "cảm ơn", example: "谢谢你！\nXièxie nǐ!\nCảm ơn bạn!"},
+  {hanzi: "星期", pinyin: "xīngqī", vn: "tuần / thứ", example: "今天星期一。\nJīntiān xīngqī yī.\nHôm nay là thứ hai."},
+  {hanzi: "学生", pinyin: "xuésheng", vn: "học sinh", example: "我是学生。\nWǒ shì xuésheng.\nTôi là học sinh."},
+  {hanzi: "学校", pinyin: "xuéxiào", vn: "trường học", example: "我在学校学习。\nWǒ zài xuéxiào xuéxí.\nTôi học ở trường."},
+  {hanzi: "学习", pinyin: "xuéxí", vn: "học tập", example: "我学习汉语。\nWǒ xuéxí Hànyǔ.\nTôi học tiếng Trung."},
+  {hanzi: "先生", pinyin: "xiānsheng", vn: "ông, thầy (Mr.)", example: "张先生是老师。\nZhāng xiānsheng shì lǎoshī.\nÔng Trương là giáo viên."},
+  {hanzi: "衣服", pinyin: "yīfu", vn: "quần áo", example: "这件衣服很好看。\nZhè jiàn yīfu hěn hǎokàn.\nBộ quần áo này rất đẹp."},
+  {hanzi: "医生", pinyin: "yīshēng", vn: "bác sĩ", example: "她是医生。\nTā shì yīshēng.\nCô ấy là bác sĩ."},
+  {hanzi: "医院", pinyin: "yīyuàn", vn: "bệnh viện", example: "我在医院工作。\nWǒ zài yīyuàn gōngzuò.\nTôi làm việc ở bệnh viện."},
+  {hanzi: "一", pinyin: "yī", vn: "một", example: "我有一本书。\nWǒ yǒu yī běn shū.\nTôi có một quyển sách."},
+  {hanzi: "一点儿", pinyin: "yìdiǎnr", vn: "một chút", example: "请等我一点儿时间。\nQǐng děng wǒ yīdiǎnr shíjiān.\nXin đợi tôi một chút thời gian."},
+  {hanzi: "有", pinyin: "yǒu", vn: "có", example: "我有两个弟弟。\nWǒ yǒu liǎng gè dìdi.\nTôi có hai em trai."},
+  {hanzi: "再见", pinyin: "zàijiàn", vn: "tạm biệt", example: "再见！\nZàijiàn!\nTạm biệt!"},
+  {hanzi: "怎么", pinyin: "zěnme", vn: "như thế nào", example: "你怎么去学校？\nNǐ zěnme qù xuéxiào?\nBạn đi đến trường bằng cách nào?"},
+  {hanzi: "怎么样", pinyin: "zěnmeyàng", vn: "thế nào", example: "今天天气怎么样？\nJīntiān tiānqì zěnmeyàng?\nThời tiết hôm nay thế nào?"},
+  {hanzi: "这", pinyin: "zhè", vn: "này", example: "这是我的书。\nZhè shì wǒ de shū.\nĐây là sách của tôi."},
+  {hanzi: "中国", pinyin: "Zhōngguó", vn: "Trung Quốc", example: "我是中国人。\nWǒ shì Zhōngguó rén.\nTôi là người Trung Quốc."},
+  {hanzi: "中午", pinyin: "zhōngwǔ", vn: "buổi trưa", example: "中午吃饭吧。\nZhōngwǔ chīfàn ba.\nTrưa ăn cơm đi."},
+  {hanzi: "住", pinyin: "zhù", vn: "sống, ở", example: "我住在河内。\nWǒ zhù zài Hénèi.\nTôi sống ở Hà Nội."},
+  {hanzi: "桌子", pinyin: "zhuōzi", vn: "cái bàn", example: "桌子上有一本书。\nZhuōzi shàng yǒu yī běn shū.\nTrên bàn có một quyển sách."},
+  {hanzi: "字", pinyin: "zì", vn: "chữ", example: "我会写汉字。\nWǒ huì xiě hànzì.\nTôi biết viết chữ Hán."},
+  {hanzi: "昨天", pinyin: "zuótiān", vn: "hôm qua", example: "昨天我去超市。\nZuótiān wǒ qù chāoshì.\nHôm qua tôi đi siêu thị."},
+  {hanzi: "左边", pinyin: "zuǒbiān", vn: "bên trái", example: "学校在我左边。\nXuéxiào zài wǒ zuǒbiān.\nTrường ở bên trái tôi."},
+  {hanzi: "右边", pinyin: "yòubiān", vn: "bên phải", example: "超市在我右边。\nChāoshì zài wǒ yòubiān.\nSiêu thị ở bên phải tôi."},
+  {hanzi: "哥哥", pinyin: "gēge", vn: "anh trai", example: "我哥哥是学生。\nWǒ gēge shì xuésheng.\nAnh trai tôi là học sinh."},
+  {hanzi: "姐姐", pinyin: "jiějie", vn: "chị gái", example: "她是我姐姐。\nTā shì wǒ jiějie.\nCô ấy là chị gái tôi."},
+  {hanzi: "弟弟", pinyin: "dìdi", vn: "em trai", example: "我弟弟在家。\nWǒ dìdi zài jiā.\nEm trai tôi ở nhà."},
+  {hanzi: "妹妹", pinyin: "mèimei", vn: "em gái", example: "我有一个妹妹。\nWǒ yǒu yī gè mèimei.\nTôi có một em gái."},
+  {hanzi: "丈夫", pinyin: "zhàngfu", vn: "chồng", example: "她的丈夫是医生。\nTā de zhàngfu shì yīshēng.\nChồng cô ấy là bác sĩ."},
+  {hanzi: "妻子", pinyin: "qīzi", vn: "vợ", example: "他妻子很漂亮。\nTā qīzi hěn piàoliang.\nVợ anh ấy rất xinh đẹp."},
+  {hanzi: "孩子", pinyin: "háizi", vn: "con, trẻ em", example: "孩子们在玩。\nHáizimen zài wán.\nBọn trẻ đang chơi."},
+  {hanzi: "身体", pinyin: "shēntǐ", vn: "sức khỏe, cơ thể", example: "你身体好吗？\nNǐ shēntǐ hǎo ma?\nSức khỏe bạn có tốt không?"},
+  {hanzi: "眼睛", pinyin: "yǎnjing", vn: "mắt", example: "她的眼睛很大。\nTā de yǎnjing hěn dà.\nĐôi mắt cô ấy rất to."},
+  {hanzi: "鼻子", pinyin: "bízi", vn: "mũi", example: "他的鼻子很高。\nTā de bízi hěn gāo.\nMũi của anh ấy cao."},
+  {hanzi: "嘴巴", pinyin: "zuǐba", vn: "miệng", example: "孩子的嘴巴很小。\nHáizi de zuǐba hěn xiǎo.\nMiệng của đứa bé rất nhỏ."},
+  {hanzi: "耳朵", pinyin: "ěrduo", vn: "tai", example: "我的耳朵疼。\nWǒ de ěrduo téng.\nTai tôi bị đau."},
+  {hanzi: "手", pinyin: "shǒu", vn: "tay", example: "我的手冷。\nWǒ de shǒu lěng.\nTay tôi lạnh."},
+  {hanzi: "脚", pinyin: "jiǎo", vn: "chân", example: "我的脚很大。\nWǒ de jiǎo hěn dà.\nChân tôi rất to."},
+  {hanzi: "医生", pinyin: "yīshēng", vn: "bác sĩ", example: "我去看医生。\nWǒ qù kàn yīshēng.\nTôi đi gặp bác sĩ."},
+  {hanzi: "护士", pinyin: "hùshi", vn: "y tá", example: "她是护士。\nTā shì hùshi.\nCô ấy là y tá."},
+  {hanzi: "药", pinyin: "yào", vn: "thuốc", example: "我要买药。\nWǒ yào mǎi yào.\nTôi muốn mua thuốc."},
+  {hanzi: "生病", pinyin: "shēngbìng", vn: "bị bệnh", example: "我生病了。\nWǒ shēngbìng le.\nTôi bị bệnh rồi."},
+  {hanzi: "休息", pinyin: "xiūxi", vn: "nghỉ ngơi", example: "你需要休息。\nNǐ xūyào xiūxi.\nBạn cần nghỉ ngơi."},
+  {hanzi: "起床", pinyin: "qǐchuáng", vn: "dậy (ra khỏi giường)", example: "我七点起床。\nWǒ qī diǎn qǐchuáng.\nTôi dậy lúc 7 giờ."},
+  {hanzi: "睡觉", pinyin: "shuìjiào", vn: "ngủ", example: "孩子们在睡觉。\nHáizimen zài shuìjiào.\nBọn trẻ đang ngủ."},
+  {hanzi: "洗澡", pinyin: "xǐzǎo", vn: "tắm", example: "我晚上洗澡。\nWǒ wǎnshàng xǐzǎo.\nBuổi tối tôi tắm."},
+  {hanzi: "洗手", pinyin: "xǐshǒu", vn: "rửa tay", example: "请洗手。\nQǐng xǐshǒu.\nXin hãy rửa tay."},
+  {hanzi: "洗衣服", pinyin: "xǐ yīfu", vn: "giặt quần áo", example: "妈妈在洗衣服。\nMāma zài xǐ yīfu.\nMẹ đang giặt quần áo."},
+  {hanzi: "穿", pinyin: "chuān", vn: "mặc (quần áo)", example: "他穿红衣服。\nTā chuān hóng yīfu.\nAnh ấy mặc quần áo đỏ."},
+  {hanzi: "衣服", pinyin: "yīfu", vn: "quần áo", example: "这件衣服很好看。\nZhè jiàn yīfu hěn hǎokàn.\nBộ quần áo này rất đẹp."},
+  {hanzi: "鞋子", pinyin: "xiézi", vn: "giày", example: "这双鞋很贵。\nZhè shuāng xié hěn guì.\nĐôi giày này rất đắt."},
+  {hanzi: "帽子", pinyin: "màozi", vn: "mũ", example: "他戴帽子。\nTā dài màozi.\nAnh ấy đội mũ."},
+  {hanzi: "衣帽间", pinyin: "yīmàojiān", vn: "phòng để quần áo/mũ", example: "衣帽间在右边。\nYīmàojiān zài yòubiān.\nPhòng để áo mũ ở bên phải."},
+  {hanzi: "桌子", pinyin: "zhuōzi", vn: "cái bàn", example: "桌子很大。\nZhuōzi hěn dà.\nCái bàn rất to."},
+  {hanzi: "椅子", pinyin: "yǐzi", vn: "ghế", example: "椅子在桌子旁边。\nYǐzi zài zhuōzi pángbiān.\nCái ghế ở bên cạnh bàn."},
+  {hanzi: "床", pinyin: "chuáng", vn: "giường", example: "床上有猫。\nChuáng shàng yǒu māo.\nTrên giường có mèo."},
+  {hanzi: "门", pinyin: "mén", vn: "cửa", example: "门关着。\nMén guānzhe.\nCửa đóng rồi."},
+  {hanzi: "窗户", pinyin: "chuānghu", vn: "cửa sổ", example: "窗户开着。\nChuānghu kāizhe.\nCửa sổ đang mở."},
+  {hanzi: "房间", pinyin: "fángjiān", vn: "phòng", example: "房间很干净。\nFángjiān hěn gānjìng.\nCăn phòng rất sạch."},
+  {hanzi: "厨房", pinyin: "chúfáng", vn: "nhà bếp", example: "我在厨房做饭。\nWǒ zài chúfáng zuòfàn.\nTôi đang nấu ăn trong bếp."},
+  {hanzi: "厕所", pinyin: "cèsuǒ", vn: "nhà vệ sinh", example: "厕所在哪儿？\nCèsuǒ zài nǎr?\nNhà vệ sinh ở đâu?"},
+  {hanzi: "楼", pinyin: "lóu", vn: "tầng, lầu", example: "我住在三楼。\nWǒ zhù zài sān lóu.\nTôi ở tầng 3."},
+  {hanzi: "电梯", pinyin: "diàntī", vn: "thang máy", example: "我们坐电梯上楼。\nWǒmen zuò diàntī shàng lóu.\nChúng tôi đi thang máy lên lầu."},
+  {hanzi: "楼梯", pinyin: "lóutī", vn: "cầu thang bộ", example: "我们走楼梯。\nWǒmen zǒu lóutī.\nChúng tôi đi cầu thang bộ."},
+  {hanzi: "电话", pinyin: "diànhuà", vn: "điện thoại", example: "请打电话给我。\nQǐng dǎ diànhuà gěi wǒ.\nXin gọi điện cho tôi."},
+  {hanzi: "手机", pinyin: "shǒujī", vn: "điện thoại di động", example: "我有一部手机。\nWǒ yǒu yī bù shǒujī.\nTôi có một chiếc điện thoại di động."},
+  {hanzi: "电脑", pinyin: "diànnǎo", vn: "máy tính", example: "我用电脑学习。\nWǒ yòng diànnǎo xuéxí.\nTôi học bằng máy tính."},
+  {hanzi: "电视", pinyin: "diànshì", vn: "ti vi", example: "他们在看电视。\nTāmen zài kàn diànshì.\nHọ đang xem ti vi."},
+  {hanzi: "电影", pinyin: "diànyǐng", vn: "phim", example: "我爱看电影。\nWǒ ài kàn diànyǐng.\nTôi thích xem phim."},
+  {hanzi: "音乐", pinyin: "yīnyuè", vn: "âm nhạc", example: "我喜欢音乐。\nWǒ xǐhuan yīnyuè.\nTôi thích âm nhạc."},
+  {hanzi: "唱歌", pinyin: "chàng gē", vn: "hát", example: "她喜欢唱歌。\nTā xǐhuan chàng gē.\nCô ấy thích hát."},
+  {hanzi: "跳舞", pinyin: "tiào wǔ", vn: "nhảy múa", example: "我们跳舞吧。\nWǒmen tiào wǔ ba.\nChúng ta nhảy đi."},
+  {hanzi: "打球", pinyin: "dǎ qiú", vn: "chơi bóng", example: "他们在打球。\nTāmen zài dǎ qiú.\nHọ đang chơi bóng."},
+  {hanzi: "踢足球", pinyin: "tī zúqiú", vn: "đá bóng", example: "男孩们踢足球。\nNánhái men tī zúqiú.\nBọn con trai đá bóng."},
+  {hanzi: "跑步", pinyin: "pǎobù", vn: "chạy bộ", example: "我每天跑步。\nWǒ měitiān pǎobù.\nTôi chạy bộ mỗi ngày."},
+  {hanzi: "游泳", pinyin: "yóuyǒng", vn: "bơi", example: "她会游泳。\nTā huì yóuyǒng.\nCô ấy biết bơi."},
+  {hanzi: "运动", pinyin: "yùndòng", vn: "thể thao", example: "我喜欢运动。\nWǒ xǐhuan yùndòng.\nTôi thích thể thao."},
+  {hanzi: "天气", pinyin: "tiānqì", vn: "thời tiết", example: "今天天气不错。\nJīntiān tiānqì bú cuò.\nThời tiết hôm nay không tệ."},
+  {hanzi: "太阳", pinyin: "tàiyáng", vn: "mặt trời", example: "太阳出来了。\nTàiyáng chūlái le.\nMặt trời mọc rồi."},
+  {hanzi: "月亮", pinyin: "yuèliang", vn: "mặt trăng", example: "晚上月亮很圆。\nWǎnshàng yuèliang hěn yuán.\nBuổi tối trăng rất tròn."},
+  {hanzi: "星星", pinyin: "xīngxing", vn: "ngôi sao", example: "天上有很多星星。\nTiānshàng yǒu hěn duō xīngxing.\nTrên trời có rất nhiều sao."},
+  {hanzi: "雨", pinyin: "yǔ", vn: "mưa", example: "今天下雨了。\nJīntiān xià yǔ le.\nHôm nay trời mưa."},
+  {hanzi: "雪", pinyin: "xuě", vn: "tuyết", example: "下雪了！\nXià xuě le!\nTuyết rơi rồi!"},
+  {hanzi: "风", pinyin: "fēng", vn: "gió", example: "今天风很大。\nJīntiān fēng hěn dà.\nHôm nay gió to."},
+  {hanzi: "春天", pinyin: "chūntiān", vn: "mùa xuân", example: "春天花开了。\nChūntiān huā kāi le.\nMùa xuân hoa nở rồi."},
+  {hanzi: "夏天", pinyin: "xiàtiān", vn: "mùa hè", example: "夏天很热。\nXiàtiān hěn rè.\nMùa hè rất nóng."},
+  {hanzi: "秋天", pinyin: "qiūtiān", vn: "mùa thu", example: "秋天很凉快。\nQiūtiān hěn liángkuai.\nMùa thu rất mát mẻ."},
+  {hanzi: "冬天", pinyin: "dōngtiān", vn: "mùa đông", example: "冬天很冷。\nDōngtiān hěn lěng.\nMùa đông rất lạnh."},
+  {hanzi: "早上", pinyin: "zǎoshang", vn: "buổi sáng", example: "早上好！\nZǎoshang hǎo!\nChào buổi sáng!"},
+  {hanzi: "中午", pinyin: "zhōngwǔ", vn: "buổi trưa", example: "中午我们吃饭。\nZhōngwǔ wǒmen chīfàn.\nBuổi trưa chúng tôi ăn cơm."},
+  {hanzi: "下午", pinyin: "xiàwǔ", vn: "buổi chiều", example: "下午我学习。\nXiàwǔ wǒ xuéxí.\nBuổi chiều tôi học."},
+  {hanzi: "晚上", pinyin: "wǎnshang", vn: "buổi tối", example: "晚上我看书。\nWǎnshang wǒ kàn shū.\nBuổi tối tôi đọc sách."},
+  {hanzi: "今天", pinyin: "jīntiān", vn: "hôm nay", example: "今天星期天。\nJīntiān xīngqītiān.\nHôm nay là chủ nhật."},
+  {hanzi: "昨天", pinyin: "zuótiān", vn: "hôm qua", example: "昨天我去北京。\nZuótiān wǒ qù Běijīng.\nHôm qua tôi đi Bắc Kinh."},
+  {hanzi: "明天", pinyin: "míngtiān", vn: "ngày mai", example: "明天见！\nMíngtiān jiàn!\nHẹn gặp ngày mai!"},
+  {hanzi: "现在", pinyin: "xiànzài", vn: "bây giờ", example: "现在几点？\nXiànzài jǐ diǎn?\nBây giờ mấy giờ?"},
+  {hanzi: "时候", pinyin: "shíhou", vn: "khi, lúc", example: "你什么时候来？\nNǐ shénme shíhou lái?\nBạn khi nào đến?"},
+  {hanzi: "时间", pinyin: "shíjiān", vn: "thời gian", example: "我没有时间。\nWǒ méiyǒu shíjiān.\nTôi không có thời gian."},
+  {hanzi: "年", pinyin: "nián", vn: "năm", example: "今年是2025年。\nJīnnián shì èr líng èr wǔ nián.\nNăm nay là 2025."},
+  {hanzi: "月", pinyin: "yuè", vn: "tháng", example: "这是五月。\nZhè shì wǔ yuè.\nĐây là tháng 5."},
+  {hanzi: "日", pinyin: "rì", vn: "ngày", example: "今天是十月一日。\nJīntiān shì shí yuè yī rì.\nHôm nay là ngày 1 tháng 10."},
+  {hanzi: "星期", pinyin: "xīngqī", vn: "tuần, thứ", example: "今天星期几？\nJīntiān xīngqī jǐ?\nHôm nay là thứ mấy?"},
+  {hanzi: "分钟", pinyin: "fēnzhōng", vn: "phút", example: "请等五分钟。\nQǐng děng wǔ fēnzhōng.\nXin đợi 5 phút."},
+  {hanzi: "钟", pinyin: "zhōng", vn: "đồng hồ, chuông", example: "墙上有一个钟。\nQiáng shàng yǒu yī gè zhōng.\nTrên tường có một cái đồng hồ."},
+  {hanzi: "点", pinyin: "diǎn", vn: "giờ (o’clock)", example: "现在两点。\nXiànzài liǎng diǎn.\nBây giờ là 2 giờ."},
+  {hanzi: "半", pinyin: "bàn", vn: "một nửa", example: "现在三点半。\nXiànzài sān diǎn bàn.\nBây giờ là 3 giờ rưỡi."},
+  {hanzi: "早饭", pinyin: "zǎofàn", vn: "bữa sáng", example: "我吃早饭。\nWǒ chī zǎofàn.\nTôi ăn sáng."},
+  {hanzi: "午饭", pinyin: "wǔfàn", vn: "bữa trưa", example: "我在公司吃午饭。\nWǒ zài gōngsī chī wǔfàn.\nTôi ăn trưa ở công ty."},
+  {hanzi: "晚饭", pinyin: "wǎnfàn", vn: "bữa tối", example: "我们一起吃晚饭。\nWǒmen yìqǐ chī wǎnfàn.\nChúng tôi ăn tối cùng nhau."},
+  {hanzi: "米饭", pinyin: "mǐfàn", vn: "cơm", example: "我喜欢吃米饭。\nWǒ xǐhuan chī mǐfàn.\nTôi thích ăn cơm."},
+  {hanzi: "面条", pinyin: "miàntiáo", vn: "mì", example: "我常吃面条。\nWǒ cháng chī miàntiáo.\nTôi thường ăn mì."},
+  {hanzi: "鸡蛋", pinyin: "jīdàn", vn: "trứng gà", example: "我吃两个鸡蛋。\nWǒ chī liǎng gè jīdàn.\nTôi ăn hai quả trứng gà."},
+  {hanzi: "牛奶", pinyin: "niúnǎi", vn: "sữa bò", example: "我喝牛奶。\nWǒ hē niúnǎi.\nTôi uống sữa bò."},
+  {hanzi: "水", pinyin: "shuǐ", vn: "nước", example: "我喝水。\nWǒ hē shuǐ.\nTôi uống nước."},
+  {hanzi: "茶", pinyin: "chá", vn: "trà", example: "他喝茶。\nTā hē chá.\nAnh ấy uống trà."},
+  {hanzi: "咖啡", pinyin: "kāfēi", vn: "cà phê", example: "我喝咖啡。\nWǒ hē kāfēi.\nTôi uống cà phê."},
+  {hanzi: "果汁", pinyin: "guǒzhī", vn: "nước hoa quả", example: "我喜欢喝果汁。\nWǒ xǐhuan hē guǒzhī.\nTôi thích uống nước hoa quả."},
+  {hanzi: "啤酒", pinyin: "píjiǔ", vn: "bia", example: "他喝啤酒。\nTā hē píjiǔ.\nAnh ấy uống bia."},
+  {hanzi: "杯子", pinyin: "bēizi", vn: "cốc, ly", example: "杯子里有水。\nBēizi lǐ yǒu shuǐ.\nTrong cốc có nước."},
+  {hanzi: "颜色", pinyin: "yánsè", vn: "màu sắc", example: "你喜欢什么颜色？\nNǐ xǐhuan shénme yánsè?\nBạn thích màu gì?"},
+  {hanzi: "红", pinyin: "hóng", vn: "màu đỏ", example: "我喜欢红色。\nWǒ xǐhuan hóngsè.\nTôi thích màu đỏ."},
+  {hanzi: "黑", pinyin: "hēi", vn: "màu đen", example: "他穿黑衣服。\nTā chuān hēi yīfu.\nAnh ấy mặc đồ đen."},
+  {hanzi: "白", pinyin: "bái", vn: "màu trắng", example: "这只猫是白色的。\nZhè zhī māo shì báisè de.\nCon mèo này màu trắng."},
+  {hanzi: "蓝", pinyin: "lán", vn: "màu xanh lam", example: "天空是蓝色的。\nTiānkōng shì lánsè de.\nBầu trời màu xanh lam."},
+  {hanzi: "黄", pinyin: "huáng", vn: "màu vàng", example: "香蕉是黄色的。\nXiāngjiāo shì huángsè de.\nChuối có màu vàng."},
+  {hanzi: "绿", pinyin: "lǜ", vn: "màu xanh lá", example: "草是绿色的。\nCǎo shì lǜsè de.\nCỏ có màu xanh lá."},
+  {hanzi: "高", pinyin: "gāo", vn: "cao", example: "他个子很高。\nTā gèzi hěn gāo.\nAnh ấy rất cao."},
+  {hanzi: "矮", pinyin: "ǎi", vn: "thấp, lùn", example: "他比我矮。\nTā bǐ wǒ ǎi.\nAnh ấy thấp hơn tôi."},
+  {hanzi: "长", pinyin: "cháng", vn: "dài", example: "这条裤子很长。\nZhè tiáo kùzi hěn cháng.\nChiếc quần này rất dài."},
+  {hanzi: "短", pinyin: "duǎn", vn: "ngắn", example: "这条裙子有点短。\nZhè tiáo qúnzi yǒudiǎn duǎn.\nChiếc váy này hơi ngắn."},
+  {hanzi: "新", pinyin: "xīn", vn: "mới", example: "我买了一件新衣服。\nWǒ mǎi le yī jiàn xīn yīfu.\nTôi mua một bộ quần áo mới."},
+  {hanzi: "旧", pinyin: "jiù", vn: "cũ", example: "这辆车太旧了。\nZhè liàng chē tài jiù le.\nChiếc xe này quá cũ rồi."},
+  {hanzi: "贵", pinyin: "guì", vn: "đắt", example: "这件衣服很贵。\nZhè jiàn yīfu hěn guì.\nBộ quần áo này rất đắt."},
+  {hanzi: "便宜", pinyin: "piányi", vn: "rẻ", example: "这双鞋很便宜。\nZhè shuāng xié hěn piányi.\nĐôi giày này rất rẻ."},
+  {hanzi: "远", pinyin: "yuǎn", vn: "xa", example: "他家很远。\nTā jiā hěn yuǎn.\nNhà anh ấy rất xa."},
+  {hanzi: "近", pinyin: "jìn", vn: "gần", example: "学校离这儿很近。\nXuéxiào lí zhèr hěn jìn.\nTrường học cách đây rất gần."},
+  {hanzi: "慢", pinyin: "màn", vn: "chậm", example: "你走得太慢。\nNǐ zǒu de tài màn.\nBạn đi quá chậm."},
+  {hanzi: "快", pinyin: "kuài", vn: "nhanh", example: "火车很快。\nHuǒchē hěn kuài.\nTàu hỏa rất nhanh."},
+  {hanzi: "冷", pinyin: "lěng", vn: "lạnh", example: "今天很冷。\nJīntiān hěn lěng.\nHôm nay rất lạnh."},
+  {hanzi: "热", pinyin: "rè", vn: "nóng", example: "天气太热了。\nTiānqì tài rè le.\nThời tiết quá nóng."},
+  {hanzi: "晴", pinyin: "qíng", vn: "trời nắng, quang đãng", example: "今天是晴天。\nJīntiān shì qíngtiān.\nHôm nay là ngày nắng."},
+  {hanzi: "阴", pinyin: "yīn", vn: "trời âm u", example: "今天是阴天。\nJīntiān shì yīntiān.\nHôm nay là ngày âm u."},
+  {hanzi: "丈夫", pinyin: "zhàngfu", vn: "chồng", example: "她的丈夫是老师。\nTā de zhàngfu shì lǎoshī.\nChồng cô ấy là giáo viên."},
+  {hanzi: "妻子", pinyin: "qīzi", vn: "vợ", example: "他妻子很漂亮。\nTā qīzi hěn piàoliang.\nVợ anh ấy rất xinh đẹp."},
+  {hanzi: "叔叔", pinyin: "shūshu", vn: "chú", example: "叔叔给我买了玩具。\nShūshu gěi wǒ mǎi le wánjù.\nChú mua đồ chơi cho tôi."},
+  {hanzi: "阿姨", pinyin: "āyí", vn: "cô, dì", example: "阿姨在做饭。\nĀyí zài zuòfàn.\nCô/dì đang nấu ăn."},
+  {hanzi: "爷爷", pinyin: "yéye", vn: "ông nội", example: "爷爷喜欢下棋。\nYéye xǐhuan xiàqí.\nÔng nội thích đánh cờ."},
+  {hanzi: "奶奶", pinyin: "nǎinai", vn: "bà nội", example: "奶奶在看电视。\nNǎinai zài kàn diànshì.\nBà nội đang xem ti vi."},
+  {hanzi: "方便", pinyin: "fāngbiàn", vn: "tiện lợi", example: "坐地铁很方便。\nZuò dìtiě hěn fāngbiàn.\nĐi tàu điện ngầm rất tiện."},
+  {hanzi: "地图", pinyin: "dìtú", vn: "bản đồ", example: "请看地图。\nQǐng kàn dìtú.\nXin hãy xem bản đồ."},
+  {hanzi: "银行", pinyin: "yínháng", vn: "ngân hàng", example: "我去银行取钱。\nWǒ qù yínháng qǔqián.\nTôi đi ngân hàng rút tiền."},
+  {hanzi: "邮局", pinyin: "yóujú", vn: "bưu điện", example: "邮局在学校旁边。\nYóujú zài xuéxiào pángbiān.\nBưu điện ở bên cạnh trường."},
+  {hanzi: "火车站", pinyin: "huǒchēzhàn", vn: "ga tàu hỏa", example: "火车站很远。\nHuǒchēzhàn hěn yuǎn.\nGa tàu hỏa rất xa."},
+  {hanzi: "机场", pinyin: "jīchǎng", vn: "sân bay", example: "我去机场接朋友。\nWǒ qù jīchǎng jiē péngyou.\nTôi đi sân bay đón bạn."},
+  {hanzi: "公共汽车", pinyin: "gōnggòng qìchē", vn: "xe buýt", example: "我坐公共汽车去公司。\nWǒ zuò gōnggòng qìchē qù gōngsī.\nTôi đi xe buýt đến công ty."},
+  {hanzi: "地铁", pinyin: "dìtiě", vn: "tàu điện ngầm", example: "我坐地铁去学校。\nWǒ zuò dìtiě qù xuéxiào.\nTôi đi học bằng tàu điện ngầm."},
+  {hanzi: "船", pinyin: "chuán", vn: "thuyền, tàu thủy", example: "他们坐船去上海。\nTāmen zuò chuán qù Shànghǎi.\nHọ đi Thượng Hải bằng thuyền."},
+  {hanzi: "自行车", pinyin: "zìxíngchē", vn: "xe đạp", example: "我骑自行车去公园。\nWǒ qí zìxíngchē qù gōngyuán.\nTôi đi công viên bằng xe đạp."},
+  {hanzi: "左边", pinyin: "zuǒbiān", vn: "bên trái", example: "商店在左边。\nShāngdiàn zài zuǒbiān.\nCửa hàng ở bên trái."},
+  {hanzi: "右边", pinyin: "yòubiān", vn: "bên phải", example: "银行在右边。\nYínháng zài yòubiān.\nNgân hàng ở bên phải."},
+  {hanzi: "旁边", pinyin: "pángbiān", vn: "bên cạnh", example: "学校在商店旁边。\nXuéxiào zài shāngdiàn pángbiān.\nTrường ở cạnh cửa hàng."},
+  {hanzi: "中间", pinyin: "zhōngjiān", vn: "ở giữa", example: "桌子在房间中间。\nZhuōzi zài fángjiān zhōngjiān.\nCái bàn ở giữa phòng."},
+  {hanzi: "东", pinyin: "dōng", vn: "đông", example: "太阳从东边出来。\nTàiyáng cóng dōngbiān chūlái.\nMặt trời mọc từ phía đông."},
+  {hanzi: "西", pinyin: "xī", vn: "tây", example: "太阳在西边落下。\nTàiyáng zài xībiān luòxià.\nMặt trời lặn ở phía tây."},
+  {hanzi: "南", pinyin: "nán", vn: "nam", example: "中国南方很热。\nZhōngguó nánfāng hěn rè.\nMiền nam Trung Quốc rất nóng."},
+  {hanzi: "北", pinyin: "běi", vn: "bắc", example: "北京在中国北方。\nBěijīng zài Zhōngguó běifāng.\nBắc Kinh ở phía bắc Trung Quốc."}
+  ,{hanzi:"把", pinyin:"bǎ", vn:"cầm; nắm; (giới từ \"bǎ\")", example:"请把门关上。\nQǐng bǎ mén guān shàng.\nLàm ơn đóng cửa lại."}
+  ,{hanzi:"吧", pinyin:"ba", vn:"trợ từ ngữ khí (nhé/đi…)", example:"我们走吧。\nWǒmen zǒu ba.\nChúng ta đi nhé."}
+  ,{hanzi:"班", pinyin:"bān", vn:"lớp; ca; kíp", example:"我们一个班。\nWǒmen yí ge bān.\nChúng tôi cùng một lớp."}
+  ,{hanzi:"搬", pinyin:"bān", vn:"chuyển; dọn", example:"他们搬家了。\nTāmen bānjiā le.\nHọ đã chuyển nhà."}
+  ,{hanzi:"办法", pinyin:"bànfǎ", vn:"biện pháp; cách", example:"我有一个好办法。\nWǒ yǒu yí ge hǎo bànfǎ.\nTôi có một cách hay."}
+  ,{hanzi:"办公室", pinyin:"bàngōngshì", vn:"văn phòng", example:"老师在办公室。\nLǎoshī zài bàngōngshì.\nCô giáo ở văn phòng."}
+  ,{hanzi:"帮忙", pinyin:"bāngmáng", vn:"giúp đỡ", example:"谢谢你帮忙。\nXièxie nǐ bāngmáng.\nCảm ơn bạn đã giúp."}
+  ,{hanzi:"帮助", pinyin:"bāngzhù", vn:"giúp; trợ giúp", example:"互相帮助很重要。\nHùxiāng bāngzhù hěn zhòngyào.\nGiúp đỡ lẫn nhau rất quan trọng."}
+  ,{hanzi:"包", pinyin:"bāo", vn:"túi; gói; bọc", example:"她买了一个新包。\nTā mǎi le yí ge xīn bāo.\nCô ấy mua một chiếc túi mới."}
+  ,{hanzi:"饱", pinyin:"bǎo", vn:"no", example:"我吃饱了。\nWǒ chī bǎo le.\nTôi no rồi."}
+  ,{hanzi:"北方", pinyin:"běifāng", vn:"phía bắc; miền bắc", example:"我来自中国北方。\nWǒ láizì Zhōngguó běifāng.\nTôi đến từ miền bắc Trung Quốc."}
+  ,{hanzi:"被", pinyin:"bèi", vn:"bị; được (bị động)", example:"他被老师表扬了。\nTā bèi lǎoshī biǎoyáng le.\nAnh ấy được cô giáo khen."}
+  ,{hanzi:"比较", pinyin:"bǐjiào", vn:"tương đối; so với", example:"今天比较冷。\nJīntiān bǐjiào lěng.\nHôm nay tương đối lạnh."}
+  ,{hanzi:"比赛", pinyin:"bǐsài", vn:"trận đấu; thi đấu", example:"明天有足球比赛。\nMíngtiān yǒu zúqiú bǐsài.\nNgày mai có trận bóng đá."}
+  ,{hanzi:"笔记本", pinyin:"bǐjìběn", vn:"sổ ghi chép; laptop", example:"我买了新笔记本。\nWǒ mǎi le xīn bǐjìběn.\nTôi mua quyển sổ mới."}
+  ,{hanzi:"必须", pinyin:"bìxū", vn:"phải; bắt buộc", example:"你必须来上课。\nNǐ bìxū lái shàngkè.\nBạn phải đến lớp."}
+  ,{hanzi:"变化", pinyin:"biànhuà", vn:"biến hoá; thay đổi", example:"城市变化很大。\nChéngshì biànhuà hěn dà.\nThành phố thay đổi rất lớn."}
+  ,{hanzi:"表示", pinyin:"biǎoshì", vn:"biểu thị; tỏ ý", example:"他表示同意。\nTā biǎoshì tóngyì.\nAnh ấy bày tỏ đồng ý."}
+  ,{hanzi:"表演", pinyin:"biǎoyǎn", vn:"biểu diễn", example:"他们在台上表演。\nTāmen zài tái shang biǎoyǎn.\nHọ biểu diễn trên sân khấu."}
+  ,{hanzi:"别人", pinyin:"biéren", vn:"người khác", example:"不要总看别人。\nBúyào zǒng kàn biéren.\nĐừng lúc nào cũng nhìn người khác."}
+  ,{hanzi:"冰箱", pinyin:"bīngxiāng", vn:"tủ lạnh", example:"冰箱里有牛奶。\nBīngxiāng lǐ yǒu niúnǎi.\nTrong tủ lạnh có sữa bò."}
+  ,{hanzi:"菜单", pinyin:"càidān", vn:"thực đơn; menu", example:"请给我菜单。\nQǐng gěi wǒ càidān.\nCho tôi xin thực đơn."}
+  ,{hanzi:"参加", pinyin:"cānjiā", vn:"tham gia", example:"我想参加活动。\nWǒ xiǎng cānjiā huódòng.\nTôi muốn tham gia hoạt động."}
+  ,{hanzi:"草", pinyin:"cǎo", vn:"cỏ", example:"草地很绿。\nCǎodì hěn lǜ.\nBãi cỏ rất xanh."}
+  ,{hanzi:"层", pinyin:"céng", vn:"tầng; lớp (lượng từ)", example:"我住五层。\nWǒ zhù wǔ céng.\nTôi ở tầng 5."}
+  ,{hanzi:"差", pinyin:"chà", vn:"kém; thiếu", example:"差五分八点。\nChà wǔ fēn bā diǎn.\nCòn 5 phút là 8 giờ."}
+  ,{hanzi:"超级市场", pinyin:"chāojí shìchǎng", vn:"siêu thị", example:"我去超级市场买菜。\nWǒ qù chāojí shìchǎng mǎi cài.\nTôi đi siêu thị mua đồ."}
+  ,{hanzi:"成绩", pinyin:"chéngjì", vn:"thành tích; điểm số", example:"他成绩很好。\nTā chéngjì hěn hǎo.\nĐiểm của anh ấy rất tốt."}
+  ,{hanzi:"城市", pinyin:"chéngshì", vn:"thành phố", example:"我喜欢这个城市。\nWǒ xǐhuan zhège chéngshì.\nTôi thích thành phố này."}
+  ,{hanzi:"迟到", pinyin:"chídào", vn:"đến muộn", example:"他上课迟到了。\nTā shàngkè chídào le.\nAnh ấy đến lớp muộn."}
+  ,{hanzi:"出现", pinyin:"chūxiàn", vn:"xuất hiện", example:"问题又出现了。\nWèntí yòu chūxiàn le.\nVấn đề lại xuất hiện."}
+  ,{hanzi:"除了", pinyin:"chúle", vn:"ngoài… ra", example:"除了我以外都到了。\nChúle wǒ yǐwài dōu dào le.\nNgoài tôi ra mọi người đều đến rồi."}
+  ,{hanzi:"春", pinyin:"chūn", vn:"mùa xuân", example:"春天来了。\nChūntiān lái le.\nMùa xuân đến rồi."}
+  ,{hanzi:"词典", pinyin:"cídiǎn", vn:"từ điển", example:"他用中文词典。\nTā yòng Zhōngwén cídiǎn.\nAnh ấy dùng từ điển Trung."}
+  ,{hanzi:"聪明", pinyin:"cōngming", vn:"thông minh", example:"她很聪明。\nTā hěn cōngming.\nCô ấy rất thông minh."}
+  ,{hanzi:"打扫", pinyin:"dǎsǎo", vn:"quét dọn", example:"周末我打扫房间。\nZhōumò wǒ dǎsǎo fángjiān.\nCuối tuần tôi dọn phòng."}
+  ,{hanzi:"打算", pinyin:"dǎsuàn", vn:"dự định; tính", example:"我打算明天去。\nWǒ dǎsuàn míngtiān qù.\nTôi dự định ngày mai đi."}
+  ,{hanzi:"带", pinyin:"dài", vn:"mang; đem", example:"记得带雨伞。\nJìde dài yǔsǎn.\nNhớ mang ô."}
+  ,{hanzi:"担心", pinyin:"dānxīn", vn:"lo lắng", example:"妈妈很担心你。\nMāma hěn dānxīn nǐ.\nMẹ rất lo cho bạn."}
+  ,{hanzi:"蛋糕", pinyin:"dàngāo", vn:"bánh gato", example:"生日吃蛋糕。\nShēngrì chī dàngāo.\nSinh nhật ăn bánh kem."}
+  ,{hanzi:"当然", pinyin:"dāngrán", vn:"đương nhiên", example:"当然可以。\nDāngrán kěyǐ.\nĐương nhiên là được."}
+  ,{hanzi:"地", pinyin:"de", vn:"trợ từ kết cấu (…một cách…)", example:"他高兴地笑了。\nTā gāoxìng de xiào le.\nAnh ấy cười một cách vui vẻ."}
+  ,{hanzi:"地方", pinyin:"dìfang", vn:"nơi; chỗ", example:"这是一个好地方。\nZhè shì yí ge hǎo dìfang.\nĐây là một nơi tốt."}
+  ,{hanzi:"电子邮件", pinyin:"diànzǐ yóujiàn", vn:"email; thư điện tử", example:"请发电子邮件给我。\nQǐng fā diànzǐ yóujiàn gěi wǒ.\nXin gửi email cho tôi."}
+  ,{hanzi:"动物", pinyin:"dòngwù", vn:"động vật", example:"我喜欢小动物。\nWǒ xǐhuan xiǎo dòngwù.\nTôi thích các con vật nhỏ."}
+  ,{hanzi:"段", pinyin:"duàn", vn:"đoạn; quãng", example:"这是一段话。\nZhè shì yí duàn huà.\nĐây là một đoạn lời."}
+  ,{hanzi:"锻炼", pinyin:"duànliàn", vn:"rèn luyện (thể thao)", example:"他每天锻炼身体。\nTā měitiān duànliàn shēntǐ.\nAnh ấy tập thể dục mỗi ngày."}
+  ,{hanzi:"多么", pinyin:"duōme", vn:"biết bao; thật là", example:"这里多么安静！\nZhèlǐ duōme ānjìng!\nỞ đây yên tĩnh biết bao!"}
+  ,{hanzi:"饿", pinyin:"è", vn:"đói", example:"我有点儿饿了。\nWǒ yǒudiǎnr è le.\nTôi hơi đói rồi."}
+  ,{hanzi:"发烧", pinyin:"fāshāo", vn:"sốt", example:"他发烧三十八度。\nTā fāshāo sānshíbā dù.\nAnh ấy sốt 38 độ."}
+  ,{hanzi:"发现", pinyin:"fāxiàn", vn:"phát hiện", example:"我发现一个问题。\nWǒ fāxiàn yí ge wèntí.\nTôi phát hiện một vấn đề."}
+  ,{hanzi:"方便", pinyin:"fāngbiàn", vn:"tiện; thuận tiện", example:"坐地铁很方便。\nZuò dìtiě hěn fāngbiàn.\nĐi tàu điện ngầm rất tiện."}
+  ,{hanzi:"放", pinyin:"fàng", vn:"đặt; để; thả", example:"把书放在桌子上。\nBǎ shū fàng zài zhuōzi shàng.\nĐặt sách lên bàn."}
+  ,{hanzi:"放心", pinyin:"fàngxīn", vn:"yên tâm", example:"请你放心。\nQǐng nǐ fàngxīn.\nBạn yên tâm nhé."}
+  ,{hanzi:"分", pinyin:"fēn", vn:"phút; điểm; chia", example:"现在八点十分。\nXiànzài bā diǎn shí fēn.\nBây giờ 8 giờ 10."}
+  ,{hanzi:"附近", pinyin:"fùjìn", vn:"gần đây; lân cận", example:"我家附近有公园。\nWǒ jiā fùjìn yǒu gōngyuán.\nGần nhà tôi có công viên."}
+  ,{hanzi:"复习", pinyin:"fùxí", vn:"ôn tập", example:"今天复习第三课。\nJīntiān fùxí dì sān kè.\nHôm nay ôn bài 3."}
+  ,{hanzi:"干净", pinyin:"gānjìng", vn:"sạch sẽ", example:"房间很干净。\nFángjiān hěn gānjìng.\nPhòng rất sạch."}
+  ,{hanzi:"感冒", pinyin:"gǎnmào", vn:"cảm mạo; cảm lạnh", example:"我感冒了。\nWǒ gǎnmào le.\nTôi bị cảm rồi."}
+  ,{hanzi:"刚", pinyin:"gāng", vn:"vừa; mới", example:"我刚到北京。\nWǒ gāng dào Běijīng.\nTôi vừa đến Bắc Kinh."}
+  ,{hanzi:"个子", pinyin:"gèzi", vn:"vóc dáng; chiều cao", example:"他个子很高。\nTā gèzi hěn gāo.\nAnh ấy cao."}
+  ,{hanzi:"根据", pinyin:"gēnjù", vn:"căn cứ; dựa theo", example:"请根据要求写。\nQǐng gēnjù yāoqiú xiě.\nHãy viết theo yêu cầu."}
+  ,{hanzi:"更", pinyin:"gèng", vn:"càng; hơn nữa", example:"她更漂亮了。\nTā gèng piàoliang le.\nCô ấy càng đẹp hơn."}
+  ,{hanzi:"公园", pinyin:"gōngyuán", vn:"công viên", example:"我们在公园散步。\nWǒmen zài gōngyuán sànbù.\nChúng tôi đi dạo trong công viên."}
+  ,{hanzi:"故事", pinyin:"gùshi", vn:"câu chuyện", example:"爷爷讲故事。\nYéye jiǎng gùshi.\nÔng kể chuyện."}
+  ,{hanzi:"刮风", pinyin:"guā fēng", vn:"nổi gió; có gió", example:"今天刮大风。\nJīntiān guā dà fēng.\nHôm nay gió to."}
+  ,{hanzi:"关", pinyin:"guān", vn:"đóng; tắt", example:"请关灯。\nQǐng guān dēng.\nHãy tắt đèn."}
+  ,{hanzi:"关系", pinyin:"guānxi", vn:"quan hệ; liên quan", example:"这和我没关系。\nZhè hé wǒ méi guānxi.\nCái này không liên quan đến tôi."}
+  ,{hanzi:"关心", pinyin:"guānxīn", vn:"quan tâm", example:"谢谢你的关心。\nXièxie nǐ de guānxīn.\nCảm ơn bạn đã quan tâm."}
+  ,{hanzi:"关于", pinyin:"guānyú", vn:"về; liên quan đến", example:"关于学习的问题。\nGuānyú xuéxí de wèntí.\nVấn đề về việc học."}
+  ,{hanzi:"过去", pinyin:"guòqù", vn:"quá khứ; đi qua", example:"事情都过去了。\nShìqing dōu guòqù le.\nMọi chuyện đã qua."}
+  ,{hanzi:"还是", pinyin:"háishi", vn:"hay là; vẫn là", example:"喝茶还是咖啡？\nHē chá háishi kāfēi?\nUống trà hay cà phê?"}
+  ,{hanzi:"害怕", pinyin:"hàipà", vn:"sợ hãi", example:"我有点害怕。\nWǒ yǒudiǎn hàipà.\nTôi hơi sợ."}
+  ,{hanzi:"黑板", pinyin:"hēibǎn", vn:"bảng đen", example:"老师在黑板上写字。\nLǎoshī zài hēibǎn shang xiězì.\nCô giáo viết chữ trên bảng."}
+  ,{hanzi:"护照", pinyin:"hùzhào", vn:"hộ chiếu", example:"别忘了带护照。\nBié wàngle dài hùzhào.\nĐừng quên mang hộ chiếu."}
+  ,{hanzi:"花", pinyin:"huā", vn:"hoa; tiêu (tiền/thời gian)", example:"她喜欢花。\nTā xǐhuan huā.\nCô ấy thích hoa."}
+  ,{hanzi:"环境", pinyin:"huánjìng", vn:"môi trường", example:"这里环境很好。\nZhèlǐ huánjìng hěn hǎo.\nMôi trường ở đây rất tốt."}
+  ,{hanzi:"换", pinyin:"huàn", vn:"đổi; thay", example:"我想换房间。\nWǒ xiǎng huàn fángjiān.\nTôi muốn đổi phòng."}
+  ,{hanzi:"会议", pinyin:"huìyì", vn:"cuộc họp; hội nghị", example:"九点开会议。\nJiǔ diǎn kāi huìyì.\n9 giờ mở cuộc họp."}
+  ,{hanzi:"或者", pinyin:"huòzhě", vn:"hoặc là", example:"坐公交或者地铁。\nZuò gōngjiāo huòzhě dìtiě.\nĐi xe buýt hoặc tàu điện."}
+  ,{hanzi:"几乎", pinyin:"jīhū", vn:"hầu như; gần như", example:"我几乎忘了。\nWǒ jīhū wàng le.\nTôi gần như quên mất."}
+  ,{hanzi:"机会", pinyin:"jīhuì", vn:"cơ hội", example:"机会不多。\nJīhuì bù duō.\nCơ hội không nhiều."}
+  ,{hanzi:"极", pinyin:"jí", vn:"cực kỳ; vô cùng", example:"这里漂亮极了。\nZhèlǐ piàoliang jí le.\nỞ đây đẹp cực kỳ."}
+  ,{hanzi:"记得", pinyin:"jìde", vn:"nhớ", example:"我记得他。\nWǒ jìde tā.\nTôi nhớ anh ấy."}
+  ,{hanzi:"记住", pinyin:"jìzhù", vn:"nhớ kỹ; ghi nhớ", example:"请记住这个词。\nQǐng jìzhù zhège cí.\nHãy nhớ kỹ từ này."}
+  ,{hanzi:"检查", pinyin:"jiǎnchá", vn:"kiểm tra", example:"医生检查身体。\nYīshēng jiǎnchá shēntǐ.\nBác sĩ kiểm tra sức khỏe."}
+  ,{hanzi:"简单", pinyin:"jiǎndān", vn:"đơn giản", example:"这个很简单。\nZhège hěn jiǎndān.\nCái này rất đơn giản."}
+  ,{hanzi:"健康", pinyin:"jiànkāng", vn:"sức khỏe; khỏe mạnh", example:"祝你健康！\nZhù nǐ jiànkāng!\nChúc bạn khỏe mạnh!"}
+  ,{hanzi:"见面", pinyin:"jiànmiàn", vn:"gặp mặt", example:"明天见面吧。\nMíngtiān jiànmiàn ba.\nNgày mai gặp nhé."}
+  ,{hanzi:"讲", pinyin:"jiǎng", vn:"nói; giảng", example:"老师讲得很清楚。\nLǎoshī jiǎng de hěn qīngchu.\nCô giáo giảng rất rõ."}
+  ,{hanzi:"降落", pinyin:"jiàngluò", vn:"hạ cánh", example:"飞机开始降落。\nFēijī kāishǐ jiàngluò.\nMáy bay bắt đầu hạ cánh."}
+  ,{hanzi:"角", pinyin:"jiǎo", vn:"góc; sừng; hào (tiền)", example:"路口有个角。\nLùkǒu yǒu ge jiǎo.\nChỗ giao đường có một góc."}
+  ,{hanzi:"教", pinyin:"jiāo/jiào", vn:"dạy (jiāo); giáo (jiào)", example:"他教我们中文。\nTā jiāo wǒmen Zhōngwén.\nAnh ấy dạy chúng tôi tiếng Trung."}
+  ,{hanzi:"教室", pinyin:"jiàoshì", vn:"phòng học; lớp học", example:"请回教室。\nQǐng huí jiàoshì.\nXin về lớp học."}
+  ,{hanzi:"斤", pinyin:"jīn", vn:"cân (0,5 kg)", example:"一斤苹果多少钱？\nYì jīn píngguǒ duōshao qián?\nNửa ký táo bao nhiêu tiền?"}
+  ,{hanzi:"经常", pinyin:"jīngcháng", vn:"thường xuyên", example:"我经常跑步。\nWǒ jīngcháng pǎobù.\nTôi thường chạy bộ."}
+  ,{hanzi:"经过", pinyin:"jīngguò", vn:"đi qua; trải qua", example:"我们经过公园。\nWǒmen jīngguò gōngyuán.\nChúng tôi đi ngang công viên."}
+  ,{hanzi:"经理", pinyin:"jīnglǐ", vn:"giám đốc; quản lý", example:"她是公司的经理。\nTā shì gōngsī de jīnglǐ.\nCô ấy là quản lý công ty."}
+  ,{hanzi:"久", pinyin:"jiǔ", vn:"lâu", example:"好久不见！\nHǎojiǔ bú jiàn!\nLâu rồi không gặp!"}
+  ,{hanzi:"句子", pinyin:"jùzi", vn:"câu (văn)", example:"请造一个句子。\nQǐng zào yí ge jùzi.\nHãy đặt một câu."}
+  ,{hanzi:"决定", pinyin:"juédìng", vn:"quyết định", example:"我决定明天去。\nWǒ juédìng míngtiān qù.\nTôi quyết định ngày mai đi."}
+  ,{hanzi:"渴", pinyin:"kě", vn:"khát", example:"我口渴了。\nWǒ kǒukě le.\nTôi khát rồi."}
+  ,{hanzi:"可爱", pinyin:"kě’ài", vn:"đáng yêu; dễ thương", example:"这只猫很可爱。\nZhè zhī māo hěn kě’ài.\nCon mèo này rất dễ thương."}
+  ,{hanzi:"刻", pinyin:"kè", vn:"khắc; (một) khắc 15’", example:"三点一刻见。\nSān diǎn yí kè jiàn.\nGặp lúc 3 giờ 15."}
+  ,{hanzi:"客人", pinyin:"kèrén", vn:"khách; vị khách", example:"今天有客人来。\nJīntiān yǒu kèrén lái.\nHôm nay có khách đến."}
+  ,{hanzi:"空调", pinyin:"kōngtiáo", vn:"điều hoà", example:"打开空调吧。\nDǎkāi kōngtiáo ba.\nBật điều hòa đi."}
+  ,{hanzi:"哭", pinyin:"kū", vn:"khóc", example:"小孩子哭了。\nXiǎo háizi kū le.\nĐứa bé khóc rồi."}
+  ,{hanzi:"裤子", pinyin:"kùzi", vn:"quần", example:"这条裤子不错。\nZhè tiáo kùzi bú cuò.\nChiếc quần này không tệ."}
+  ,{hanzi:"快要", pinyin:"kuàiyào", vn:"sắp; gần", example:"天快要黑了。\nTiān kuàiyào hēi le.\nTrời sắp tối rồi."}
+  ,{hanzi:"筷子", pinyin:"kuàizi", vn:"đũa", example:"我会用筷子。\nWǒ huì yòng kuàizi.\nTôi biết dùng đũa."}
+  ,{hanzi:"离开", pinyin:"líkāi", vn:"rời khỏi; rời đi", example:"他离开家了。\nTā líkāi jiā le.\nAnh ấy rời nhà rồi."}
+  ,{hanzi:"礼物", pinyin:"lǐwù", vn:"quà", example:"我送你一件礼物。\nWǒ sòng nǐ yí jiàn lǐwù.\nTôi tặng bạn một món quà."}
+  ,{hanzi:"历史", pinyin:"lìshǐ", vn:"lịch sử", example:"我喜欢中国历史。\nWǒ xǐhuan Zhōngguó lìshǐ.\nTôi thích lịch sử Trung Quốc."}
+  ,{hanzi:"脸", pinyin:"liǎn", vn:"mặt; khuôn mặt", example:"他脸红了。\nTā liǎn hóng le.\nMặt anh ấy đỏ lên."}
+  ,{hanzi:"练习", pinyin:"liànxí", vn:"luyện tập; bài tập", example:"多做练习。\nDuō zuò liànxí.\nLàm nhiều bài tập vào."}
+  ,{hanzi:"联系", pinyin:"liánxì", vn:"liên hệ; liên lạc", example:"请和我联系。\nQǐng hé wǒ liánxì.\nHãy liên hệ với tôi."}
+  ,{hanzi:"了解", pinyin:"liǎojiě", vn:"hiểu; tìm hiểu", example:"我了解你的想法。\nWǒ liǎojiě nǐ de xiǎngfǎ.\nTôi hiểu suy nghĩ của bạn."}
+  ,{hanzi:"邻居", pinyin:"línjū", vn:"hàng xóm", example:"我和邻居很熟。\nWǒ hé línjū hěn shú.\nTôi rất thân với hàng xóm."}
+  ,{hanzi:"马上", pinyin:"mǎshàng", vn:"ngay; ngay lập tức", example:"我马上来。\nWǒ mǎshàng lái.\nTôi tới ngay."}
+  ,{hanzi:"满意", pinyin:"mǎnyì", vn:"hài lòng", example:"你满意这个结果吗？\nNǐ mǎnyì zhège jiéguǒ ma?\nBạn hài lòng với kết quả chứ?"}
+  ,{hanzi:"米", pinyin:"mǐ", vn:"gạo; mét", example:"一米七高。\nYì mǐ qī gāo.\nCao 1 mét 7."}
+  ,{hanzi:"面包", pinyin:"miànbāo", vn:"bánh mì", example:"我买了面包。\nWǒ mǎi le miànbāo.\nTôi mua bánh mì."}
+  ,{hanzi:"明白", pinyin:"míngbai", vn:"hiểu rõ; minh bạch", example:"我明白你的意思。\nWǒ míngbai nǐ de yìsi.\nTôi hiểu ý bạn."}
+  ,{hanzi:"拿", pinyin:"ná", vn:"cầm; lấy; đem", example:"请把那本书拿来。\nQǐng bǎ nà běn shū nálái.\nLàm ơn lấy cuốn sách kia lại đây."}
+  ,{hanzi:"南方", pinyin:"nánfāng", vn:"miền nam", example:"我去南方旅行。\nWǒ qù nánfāng lǚxíng.\nTôi đi du lịch miền nam."}
+  ,{hanzi:"难", pinyin:"nán", vn:"khó", example:"这道题很难。\nZhè dào tí hěn nán.\nCâu này rất khó."}
+  ,{hanzi:"难过", pinyin:"nánguò", vn:"khó chịu; buồn", example:"别难过。\nBié nánguò.\nĐừng buồn."}
+  ,{hanzi:"年轻", pinyin:"niánqīng", vn:"trẻ; trẻ tuổi", example:"他很年轻。\nTā hěn niánqīng.\nAnh ấy rất trẻ."}
+  ,{hanzi:"鸟", pinyin:"niǎo", vn:"chim", example:"鸟在树上唱歌。\nNiǎo zài shù shang chànggē.\nChim hót trên cây."}
+  ,{hanzi:"努力", pinyin:"nǔlì", vn:"nỗ lực; chăm chỉ", example:"他学习很努力。\nTā xuéxí hěn nǔlì.\nAnh ấy học rất chăm chỉ."}
+  ,{hanzi:"盘子", pinyin:"pánzi", vn:"đĩa", example:"桌上有三个盘子。\nZhuō shang yǒu sān ge pánzi.\nTrên bàn có ba cái đĩa."}
+  ,{hanzi:"葡萄", pinyin:"pútáo", vn:"nho", example:"我爱吃葡萄。\nWǒ ài chī pútáo.\nTôi thích ăn nho."}
+  ,{hanzi:"普通话", pinyin:"Pǔtōnghuà", vn:"phổ thông thoại (Quan thoại)", example:"我会说普通话。\nWǒ huì shuō Pǔtōnghuà.\nTôi biết nói Quan thoại."}
+  ,{hanzi:"其实", pinyin:"qíshí", vn:"kỳ thực; thực ra", example:"我其实不太懂。\nWǒ qíshí bú tài dǒng.\nThực ra tôi không hiểu lắm."}
+  ,{hanzi:"其他", pinyin:"qítā", vn:"khác; cái khác", example:"还有其他问题吗？\nHái yǒu qítā wèntí ma?\nCòn vấn đề nào khác không?"}
+  ,{hanzi:"奇怪", pinyin:"qíguài", vn:"kỳ lạ", example:"这真奇怪。\nZhè zhēn qíguài.\nCái này thật kỳ lạ."}
+  ,{hanzi:"骑", pinyin:"qí", vn:"cưỡi; đi (xe đạp/ngựa)", example:"我骑自行车上班。\nWǒ qí zìxíngchē shàngbān.\nTôi đi làm bằng xe đạp."}
+  ,{hanzi:"起飞", pinyin:"qǐfēi", vn:"cất cánh", example:"飞机十点起飞。\nFēijī shí diǎn qǐfēi.\nMáy bay cất cánh lúc 10 giờ."}
+  ,{hanzi:"起来", pinyin:"qǐlái", vn:"đứng dậy; dậy; lên", example:"请站起来。\nQǐng zhàn qǐlái.\nXin đứng lên."}
+  ,{hanzi:"清楚", pinyin:"qīngchu", vn:"rõ ràng; rõ", example:"我听不清楚。\nWǒ tīng bù qīngchu.\nTôi nghe không rõ."}
+  ,{hanzi:"请假", pinyin:"qǐngjià", vn:"xin nghỉ", example:"我想请一天假。\nWǒ xiǎng qǐng yì tiān jià.\nTôi muốn xin nghỉ một ngày."}
+  ,{hanzi:"裙子", pinyin:"qúnzi", vn:"váy", example:"她的裙子很好看。\nTā de qúnzi hěn hǎokàn.\nVáy của cô ấy rất đẹp."}
+  ,{hanzi:"然后", pinyin:"ránhòu", vn:"sau đó; rồi", example:"先吃饭，然后学习。\nXiān chīfàn, ránhòu xuéxí.\nTrước ăn cơm, sau đó học."}
+  ,{hanzi:"热情", pinyin:"rèqíng", vn:"nhiệt tình", example:"她对人很热情。\nTā duì rén hěn rèqíng.\nCô ấy rất nhiệt tình với mọi người."}
+  ,{hanzi:"认为", pinyin:"rènwéi", vn:"cho rằng; cho là", example:"我认为你说得对。\nWǒ rènwéi nǐ shuō de duì.\nTôi cho rằng bạn nói đúng."}
+  ,{hanzi:"容易", pinyin:"róngyì", vn:"dễ; dễ dàng", example:"这很容易学。\nZhè hěn róngyì xué.\nCái này dễ học."}
+  ,{hanzi:"如果", pinyin:"rúguǒ", vn:"nếu; nếu như", example:"如果下雨就不去。\nRúguǒ xiàyǔ jiù bú qù.\nNếu mưa thì không đi."}
+  ,{hanzi:"伞", pinyin:"sǎn", vn:"ô; dù", example:"带一把伞吧。\nDài yì bǎ sǎn ba.\nMang một chiếc ô đi."}
+  ,{hanzi:"上网", pinyin:"shàngwǎng", vn:"lên mạng", example:"我每天上网学习。\nWǒ měitiān shàngwǎng xuéxí.\nTôi lên mạng học mỗi ngày."}
+  ,{hanzi:"生气", pinyin:"shēngqì", vn:"tức giận; giận dỗi", example:"别生气了。\nBié shēngqì le.\nĐừng giận nữa."}
+  ,{hanzi:"声音", pinyin:"shēngyīn", vn:"âm thanh; giọng", example:"你的声音很好听。\nNǐ de shēngyīn hěn hǎotīng.\nGiọng bạn rất hay."}
+  ,{hanzi:"试", pinyin:"shì", vn:"thử; thử xem", example:"试一试这件衣服。\nShì yí shì zhè jiàn yīfu.\nThử bộ quần áo này xem."}
+  ,{hanzi:"瘦", pinyin:"shòu", vn:"gầy", example:"他太瘦了。\nTā tài shòu le.\nAnh ấy gầy quá."}
+  ,{hanzi:"舒服", pinyin:"shūfu", vn:"thoải mái; dễ chịu", example:"这把椅子很舒服。\nZhè bǎ yǐzi hěn shūfu.\nCái ghế này rất thoải mái."}
+  ,{hanzi:"双", pinyin:"shuāng", vn:"đôi; cặp (lượng từ)", example:"一双鞋。\nYì shuāng xié.\nMột đôi giày."}
+  ,{hanzi:"水平", pinyin:"shuǐpíng", vn:"trình độ; mức độ", example:"她的中文水平很高。\nTā de Zhōngwén shuǐpíng hěn gāo.\nTrình độ tiếng Trung của cô ấy rất cao."}
+  ,{hanzi:"司机", pinyin:"sījī", vn:"tài xế; lái xe", example:"出租车司机很热情。\nChūzūchē sījī hěn rèqíng.\nTài xế taxi rất nhiệt tình."}
+  ,{hanzi:"糖", pinyin:"táng", vn:"đường; kẹo", example:"少吃糖更健康。\nShǎo chī táng gèng jiànkāng.\nĂn ít đường thì khỏe hơn."}
+  ,{hanzi:"特别", pinyin:"tèbié", vn:"đặc biệt; rất", example:"我特别喜欢你。\nWǒ tèbié xǐhuan nǐ.\nTôi đặc biệt thích bạn."}
+  ,{hanzi:"体育", pinyin:"tǐyù", vn:"thể dục; thể thao", example:"他是体育老师。\nTā shì tǐyù lǎoshī.\nAnh ấy là thầy thể dục."}
+  ,{hanzi:"提高", pinyin:"tígāo", vn:"nâng cao; cải thiện", example:"努力提高水平。\nNǔlì tígāo shuǐpíng.\nNỗ lực nâng cao trình độ."}
+  ,{hanzi:"甜", pinyin:"tián", vn:"ngọt", example:"这个蛋糕很甜。\nZhège dàngāo hěn tián.\nCái bánh này rất ngọt."}
+  ,{hanzi:"条", pinyin:"tiáo", vn:"cái; chiếc (đồ dài/nhỏ)", example:"一条裤子。\nYì tiáo kùzi.\nMột chiếc quần."}
+  ,{hanzi:"同意", pinyin:"tóngyì", vn:"đồng ý", example:"我完全同意。\nWǒ wánquán tóngyì.\nTôi hoàn toàn đồng ý."}
+  ,{hanzi:"头发", pinyin:"tóufa", vn:"tóc", example:"她的头发很长。\nTā de tóufa hěn cháng.\nTóc cô ấy rất dài."}
+  ,{hanzi:"突然", pinyin:"tūrán", vn:"đột nhiên; bỗng nhiên", example:"天气突然变冷。\nTiānqì tūrán biàn lěng.\nThời tiết bỗng trở lạnh."}
+  ,{hanzi:"腿", pinyin:"tuǐ", vn:"chân (bộ phận cơ thể)", example:"我的腿疼。\nWǒ de tuǐ téng.\nChân tôi đau."}
+  ,{hanzi:"完成", pinyin:"wánchéng", vn:"hoàn thành", example:"任务完成了吗？\nRènwu wánchéng le ma?\nNhiệm vụ hoàn thành chưa?"}
+  ,{hanzi:"完全", pinyin:"wánquán", vn:"hoàn toàn", example:"我完全明白。\nWǒ wánquán míngbai.\nTôi hoàn toàn hiểu."}
+  ,{hanzi:"忘记", pinyin:"wàngjì", vn:"quên", example:"别忘记带钥匙。\nBié wàngjì dài yàoshi.\nĐừng quên mang chìa khóa."}
+  ,{hanzi:"为了", pinyin:"wèile", vn:"vì; để", example:"为了健康，多运动。\nWèile jiànkāng, duō yùndòng.\nVì sức khỏe, hãy vận động nhiều."}
+  ,{hanzi:"位", pinyin:"wèi", vn:"vị (lượng từ kính trọng)", example:"这位老师很好。\nZhè wèi lǎoshī hěn hǎo.\nVị giáo viên này rất tốt."}
+  ,{hanzi:"文化", pinyin:"wénhuà", vn:"văn hoá", example:"我喜欢中国文化。\nWǒ xǐhuan Zhōngguó wénhuà.\nTôi thích văn hóa Trung Quốc."}
+  ,{hanzi:"西瓜", pinyin:"xīguā", vn:"dưa hấu", example:"夏天吃西瓜。\nXiàtiān chī xīguā.\nMùa hè ăn dưa hấu."}
+  ,{hanzi:"洗手间", pinyin:"xǐshǒujiān", vn:"nhà vệ sinh", example:"洗手间在哪里？\nXǐshǒujiān zài nǎlǐ?\nNhà vệ sinh ở đâu?"}
+  ,{hanzi:"洗衣机", pinyin:"xǐyījī", vn:"máy giặt", example:"我买了新洗衣机。\nWǒ mǎi le xīn xǐyījī.\nTôi mua máy giặt mới."}
+  ,{hanzi:"先", pinyin:"xiān", vn:"trước; đầu tiên", example:"你先走吧。\nNǐ xiān zǒu ba.\nBạn đi trước đi."}
+  ,{hanzi:"相同", pinyin:"xiāngtóng", vn:"giống nhau", example:"我们的想法相同。\nWǒmen de xiǎngfǎ xiāngtóng.\nSuy nghĩ của chúng ta giống nhau."}
+  ,{hanzi:"相信", pinyin:"xiāngxìn", vn:"tin tưởng", example:"我相信你。\nWǒ xiāngxìn nǐ.\nTôi tin bạn."}
+  ,{hanzi:"香蕉", pinyin:"xiāngjiāo", vn:"chuối", example:"香蕉很甜。\nXiāngjiāo hěn tián.\nChuối rất ngọt."}
+  ,{hanzi:"相机", pinyin:"xiàngjī", vn:"máy ảnh", example:"他买了新相机。\nTā mǎi le xīn xiàngjī.\nAnh ấy mua máy ảnh mới."}
+  ,{hanzi:"像", pinyin:"xiàng", vn:"giống như; tượng", example:"她长得像妈妈。\nTā zhǎng de xiàng māma.\nCô ấy trông giống mẹ."}
+  ,{hanzi:"向", pinyin:"xiàng", vn:"hướng; về phía", example:"向前走。\nXiàng qián zǒu.\nĐi về phía trước."}
+  ,{hanzi:"小心", pinyin:"xiǎoxīn", vn:"cẩn thận", example:"请小心台阶。\nQǐng xiǎoxīn táijiē.\nXin cẩn thận bậc thang."}
+  ,{hanzi:"校长", pinyin:"xiàozhǎng", vn:"hiệu trưởng", example:"校长开会讲话。\nXiàozhǎng kāihuì jiǎnghuà.\nHiệu trưởng phát biểu trong cuộc họp."}
+  ,{hanzi:"新闻", pinyin:"xīnwén", vn:"tin tức", example:"我每天看新闻。\nWǒ měitiān kàn xīnwén.\nTôi xem tin tức mỗi ngày."}
+  ,{hanzi:"新鲜", pinyin:"xīnxiān", vn:"tươi mới", example:"这些水果很新鲜。\nZhèxiē shuǐguǒ hěn xīnxiān.\nNhững hoa quả này rất tươi."}
+  ,{hanzi:"信", pinyin:"xìn", vn:"thư; tin", example:"我给你写信。\nWǒ gěi nǐ xiě xìn.\nTôi viết thư cho bạn."}
+  ,{hanzi:"兴趣", pinyin:"xìngqù", vn:"hứng thú; sở thích", example:"我对音乐很有兴趣。\nWǒ duì yīnyuè hěn yǒu xìngqù.\nTôi rất hứng thú với âm nhạc."}
+  ,{hanzi:"熊猫", pinyin:"xióngmāo", vn:"gấu trúc", example:"熊猫很可爱。\nXióngmāo hěn kě’ài.\nGấu trúc rất dễ thương."}
+  ,{hanzi:"需要", pinyin:"xūyào", vn:"cần; cần phải", example:"我需要帮助。\nWǒ xūyào bāngzhù.\nTôi cần sự giúp đỡ."}
+  ,{hanzi:"选择", pinyin:"xuǎnzé", vn:"lựa chọn", example:"请自己选择。\nQǐng zìjǐ xuǎnzé.\nHãy tự mình lựa chọn."}
+  ,{hanzi:"要求", pinyin:"yāoqiú", vn:"yêu cầu", example:"这是工作的要求。\nZhè shì gōngzuò de yāoqiú.\nĐây là yêu cầu của công việc."}
+  ,{hanzi:"一定", pinyin:"yídìng", vn:"nhất định; chắc chắn", example:"你一定能行。\nNǐ yídìng néng xíng.\nBạn nhất định làm được."}
+  ,{hanzi:"一共", pinyin:"yígòng", vn:"tổng cộng", example:"一共多少钱？\nYígòng duōshao qián?\nTổng cộng bao nhiêu tiền?"}
+  ,{hanzi:"一会儿", pinyin:"yíhuìr", vn:"một lát; chốc lát", example:"请等一会儿。\nQǐng děng yíhuìr.\nXin đợi một lát."}
+  ,{hanzi:"一样", pinyin:"yíyàng", vn:"giống nhau", example:"他们穿得一样。\nTāmen chuān de yíyàng.\nHọ mặc giống nhau."}
+  ,{hanzi:"以前", pinyin:"yǐqián", vn:"trước đây", example:"我以前在北京。\nWǒ yǐqián zài Běijīng.\nTrước đây tôi ở Bắc Kinh."}
+  ,{hanzi:"以后", pinyin:"yǐhòu", vn:"sau này; về sau", example:"以后常联系。\nYǐhòu cháng liánxì.\nSau này hay liên lạc nhé."}
+  ,{hanzi:"以为", pinyin:"yǐwéi", vn:"tưởng rằng; cho là", example:"我以为你不来。\nWǒ yǐwéi nǐ bù lái.\nTôi tưởng bạn không đến."}
+  ,{hanzi:"影响", pinyin:"yǐngxiǎng", vn:"ảnh hưởng", example:"别受他影响。\nBié shòu tā yǐngxiǎng.\nĐừng bị anh ta ảnh hưởng."}
+  ,{hanzi:"饮料", pinyin:"yǐnliào", vn:"đồ uống; thức uống", example:"冰箱里有饮料。\nBīngxiāng lǐ yǒu yǐnliào.\nTrong tủ lạnh có đồ uống."}
+  ,{hanzi:"应该", pinyin:"yīnggāi", vn:"nên; phải", example:"你应该休息。\nNǐ yīnggāi xiūxi.\nBạn nên nghỉ ngơi."}
+  ,{hanzi:"用", pinyin:"yòng", vn:"dùng; sử dụng", example:"这个怎么用？\nZhège zěnme yòng?\nCái này dùng thế nào?"}
+  ,{hanzi:"有名", pinyin:"yǒumíng", vn:"nổi tiếng", example:"这是有名的地方。\nZhè shì yǒumíng de dìfang.\nĐây là nơi nổi tiếng."}
+  ,{hanzi:"又", pinyin:"yòu", vn:"lại; vừa… vừa…", example:"他又高又瘦。\nTā yòu gāo yòu shòu.\nAnh ấy vừa cao vừa gầy."}
+  ,{hanzi:"遇到", pinyin:"yùdào", vn:"gặp; gặp phải", example:"我遇到一个朋友。\nWǒ yùdào yí ge péngyou.\nTôi gặp một người bạn."}
+  ,{hanzi:"元", pinyin:"yuán", vn:"đồng (tiền TQ); nguyên", example:"一共二十元。\nYígòng èrshí yuán.\nTổng cộng 20 tệ."}
+  ,{hanzi:"愿意", pinyin:"yuànyì", vn:"bằng lòng; nguyện ý", example:"我愿意帮你。\nWǒ yuànyì bāng nǐ.\nTôi sẵn lòng giúp bạn."}
+  ,{hanzi:"云", pinyin:"yún", vn:"mây", example:"天上的云很美。\nTiān shàng de yún hěn měi.\nMây trên trời rất đẹp."}
+  ,{hanzi:"越…越…", pinyin:"yuè…yuè…", vn:"càng… càng…", example:"天气越来𠮟越冷。\nTiānqì yuèláiyuè lěng.\nThời tiết càng ngày càng lạnh."}
+  ,{hanzi:"站", pinyin:"zhàn", vn:"đứng; trạm", example:"请站在这儿。\nQǐng zhàn zài zhèr.\nXin đứng ở đây."}
+  ,{hanzi:"张", pinyin:"zhāng", vn:"tờ; tấm (lượng từ)", example:"一张纸。\nYì zhāng zhǐ.\nMột tờ giấy."}
+  ,{hanzi:"着急", pinyin:"zháojí", vn:"lo lắng; sốt ruột", example:"别着急。\nBié zháojí.\nĐừng sốt ruột."}
+  ,{hanzi:"照顾", pinyin:"zhàogù", vn:"chăm sóc; trông nom", example:"谢谢你照顾我。\nXièxie nǐ zhàogù wǒ.\nCảm ơn bạn đã chăm sóc tôi."}
+  ,{hanzi:"照片", pinyin:"zhàopiàn", vn:"ảnh; tấm ảnh", example:"给我看你的照片。\nGěi wǒ kàn nǐ de zhàopiàn.\nCho tôi xem ảnh của bạn."}
+  ,{hanzi:"照相机", pinyin:"zhàoxiàngjī", vn:"máy chụp ảnh", example:"我带了照相机。\nWǒ dài le zhàoxiàngjī.\nTôi mang theo máy ảnh."}
+  ,{hanzi:"只", pinyin:"zhǐ", vn:"chỉ; chỉ có", example:"我只想休息。\nWǒ zhǐ xiǎng xiūxi.\nTôi chỉ muốn nghỉ ngơi."}
+  ,{hanzi:"终于", pinyin:"zhōngyú", vn:"cuối cùng; rốt cuộc", example:"我终于明白了。\nWǒ zhōngyú míngbai le.\nCuối cùng tôi đã hiểu."}
+  ,{hanzi:"种", pinyin:"zhǒng", vn:"loại; trồng", example:"这种水果很好吃。\nZhè zhǒng shuǐguǒ hěn hǎochī.\nLoại hoa quả này rất ngon."}
+  ,{hanzi:"重要", pinyin:"zhòngyào", vn:"quan trọng", example:"安全很重要。\nĀnquán hěn zhòngyào.\nAn toàn rất quan trọng."}
+  ,{hanzi:"周末", pinyin:"zhōumò", vn:"cuối tuần", example:"周末一起出去吧。\nZhōumò yìqǐ chūqù ba.\nCuối tuần cùng đi chơi nhé."}
+  ,{hanzi:"注意", pinyin:"zhùyì", vn:"chú ý", example:"请注意安全。\nQǐng zhùyì ānquán.\nXin chú ý an toàn."}
+  ,{hanzi:"字典", pinyin:"zìdiǎn", vn:"từ điển (chữ)", example:"这本字典很有用。\nZhè běn zìdiǎn hěn yǒuyòng.\nCuốn từ điển này rất hữu ích."}
+  ,{hanzi:"总是", pinyin:"zǒngshì", vn:"luôn luôn; lúc nào cũng", example:"他总是迟到。\nTā zǒngshì chídào.\nAnh ấy luôn đến muộn."}
+  ,{hanzi:"最近", pinyin:"zuìjìn", vn:"gần đây; dạo gần đây", example:"你最近好吗？\nNǐ zuìjìn hǎo ma?\nDạo này bạn ổn không?"}
+  ,{hanzi:"作业", pinyin:"zuòyè", vn:"bài tập (về nhà)", example:"请交作业。\nQǐng jiāo zuòyè.\nNộp bài tập nhé."}
+  ,{hanzi:"宾馆", pinyin:"bīnguǎn", vn:"khách sạn (nhỏ)", example:"这家宾馆很干净。\nZhè jiā bīnguǎn hěn gānjìng.\nKhách sạn này rất sạch."}
+  ,{hanzi:"别", pinyin:"bié", vn:"đừng; chớ", example:"别担心，一切都会好的。\nBié dānxīn, yíqiè dōu huì hǎo de.\nĐừng lo, mọi thứ sẽ ổn."}
+  ,{hanzi:"手表", pinyin:"shǒubiǎo", vn:"đồng hồ đeo tay", example:"你的手表几点了？\nNǐ de shǒubiǎo jǐ diǎn le?\nĐồng hồ của bạn mấy giờ rồi?"}
+  ,{hanzi:"动物园", pinyin:"dòngwùyuán", vn:"vườn thú", example:"周末我们去动物园。\nZhōumò wǒmen qù dòngwùyuán.\nCuối tuần chúng ta đi vườn thú."}
+  ,{hanzi:"刚才", pinyin:"gāngcái", vn:"vừa nãy; lúc nãy", example:"我刚才给你打电话。\nWǒ gāngcái gěi nǐ dǎ diànhuà.\nVừa nãy tôi gọi điện cho bạn."}
+  ,{hanzi:"公斤", pinyin:"gōngjīn", vn:"kilôgam (kg)", example:"这个西瓜三公斤。\nZhège xīguā sān gōngjīn.\nQuả dưa hấu này 3 kg."}
+  ,{hanzi:"公里", pinyin:"gōnglǐ", vn:"kilômét (km)", example:"学校离我家两公里。\nXuéxiào lí wǒ jiā liǎng gōnglǐ.\nTrường cách nhà tôi 2 km."}
+  ,{hanzi:"关门", pinyin:"guān mén", vn:"đóng cửa", example:"商店晚上九点关门。\nShāngdiàn wǎnshang jiǔ diǎn guān mén.\nCửa hàng đóng cửa lúc 9 giờ tối."}
+  ,{hanzi:"国家", pinyin:"guójiā", vn:"quốc gia; đất nước", example:"中国是一个很大的国家。\nZhōngguó shì yí gè hěn dà de guójiā.\nTrung Quốc là một quốc gia rất lớn."}
+  ,{hanzi:"花园", pinyin:"huāyuán", vn:"vườn hoa; khu vườn", example:"他家有一个小花园。\nTā jiā yǒu yí gè xiǎo huāyuán.\nNhà anh ấy có một khu vườn nhỏ."}
+  ,{hanzi:"还", pinyin:"hái", vn:"vẫn; còn; còn nữa", example:"我还在办公室。\nWǒ hái zài bàngōngshì.\nTôi vẫn ở văn phòng."}
+  ,{hanzi:"季节", pinyin:"jìjié", vn:"mùa; mùa vụ", example:"你最喜欢哪个季节？\nNǐ zuì xǐhuan nǎ ge jìjié?\nBạn thích mùa nào nhất?"}
+  ,{hanzi:"警察", pinyin:"jǐngchá", vn:"cảnh sát", example:"有事请找警察。\nYǒu shì qǐng zhǎo jǐngchá.\nCó việc xin tìm cảnh sát."}
+  ,{hanzi:"年级", pinyin:"niánjí", vn:"khối; lớp (cấp)", example:"我在三年级。\nWǒ zài sān niánjí.\nTôi học khối ba."}
+  ,{hanzi:"爬山", pinyin:"páshān", vn:"leo núi", example:"我们周日去爬山吧。\nWǒmen zhōurì qù páshān ba.\nChủ nhật mình đi leo núi nhé."}
+  ,{hanzi:"认真", pinyin:"rènzhēn", vn:"nghiêm túc; chăm chỉ", example:"他学习很认真。\nTā xuéxí hěn rènzhēn.\nAnh ấy học rất nghiêm túc."}
+  ,{hanzi:"上班", pinyin:"shàngbān", vn:"đi làm; làm việc", example:"我八点上班。\nWǒ bā diǎn shàngbān.\nTôi đi làm lúc 8 giờ."}
+  ,{hanzi:"上课", pinyin:"shàngkè", vn:"lên lớp; vào học", example:"快上课了。\nKuài shàngkè le.\nSắp vào học rồi."}
+  ,{hanzi:"生日", pinyin:"shēngri", vn:"sinh nhật", example:"祝你生日快乐！\nZhù nǐ shēngri kuàilè!\nChúc bạn sinh nhật vui vẻ!"}
+  ,{hanzi:"世界", pinyin:"shìjiè", vn:"thế giới", example:"世界很大。\nShìjiè hěn dà.\nThế giới rất rộng lớn."}
+  ,{hanzi:"西边", pinyin:"xībian", vn:"phía tây; bên tây", example:"太阳在西边下山。\nTàiyáng zài xībian xiàshān.\nMặt trời lặn ở phía tây."}
+  ,{hanzi:"习惯", pinyin:"xíguàn", vn:"thói quen; quen với", example:"我习惯早起。\nWǒ xíguàn zǎo qǐ.\nTôi quen dậy sớm."}
+  ,{hanzi:"行李", pinyin:"xíngli", vn:"hành lý", example:"行李不太多。\nXíngli bú tài duō.\nHành lý không nhiều lắm."}
+    ];
+
+    /* =========================
+       2. TAB CHUYỂN MODE
+    ========================== */
+    (function setupTabs(){
+      const buttons = document.querySelectorAll('.mode-btn');
+      const modes = document.querySelectorAll('.mode');
+
+      buttons.forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const target = btn.getAttribute('data-mode');
+          buttons.forEach(b=>b.classList.remove('active'));
+          modes.forEach(m=>m.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById(target).classList.add('active');
+        });
+      });
+    })();
+
+    /* =========================
+       3. MODE 1 – FLASHCARD
+    ========================== */
+
+    const FOLDER_SIZE = 25;
+    const knownKey = 'hsk3_flash_known_indices';
+
+    let knownSet = new Set();
+    try{
+      const saved = localStorage.getItem(knownKey);
+      if(saved){
+        const arr = JSON.parse(saved);
+        if(Array.isArray(arr)){
+          knownSet = new Set(arr);
+        }
+      }
+    }catch(e){}
+
+    const foldersGrid = document.getElementById('foldersGrid');
+    const folderScreen = document.getElementById('folderScreen');
+    const studyScreen = document.getElementById('studyScreen');
+    const backToFolders = document.getElementById('backToFolders');
+    const studyFolderLabel = document.getElementById('studyFolderLabel');
+
+    const hanziFront = document.getElementById('hanzi');
+    const pinyinFront = document.getElementById('pinyin');
+    const hanziBack = document.getElementById('hanzi-back');
+    const pinyinBack = document.getElementById('pinyin-back');
+    const meaningBack = document.getElementById('meaning');
+    const exampleBack = document.getElementById('example');
+    const inner = document.getElementById('inner');
+    const speakBtn = document.getElementById('speakBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const againBtn = document.getElementById('againBtn');
+    const knownBtn = document.getElementById('knownBtn');
+
+    let currentFolderIndex = 0;
+    let currentDeckIndices = [];
+    let currentDeckPos = 0;
+
+    function saveKnown(){
+      try{
+        localStorage.setItem(knownKey, JSON.stringify(Array.from(knownSet)));
+      }catch(e){}
+    }
+
+    function buildFolders(){
+      foldersGrid.innerHTML = '';
+      if(!cards || cards.length === 0) return;
+      const folderCount = Math.ceil(cards.length / FOLDER_SIZE);
+
+      for(let i=0;i<folderCount;i++){
+        const start = i * FOLDER_SIZE;
+        const end = Math.min((i+1)*FOLDER_SIZE, cards.length);
+        const total = end - start;
+
+        let knownCount = 0;
+        for(let idx=start; idx<end; idx++){
+          if(knownSet.has(idx)) knownCount++;
+        }
+        const percent = total === 0 ? 0 : Math.round(knownCount*100/total);
+
+        const cardEl = document.createElement('div');
+        cardEl.className = 'folder-card';
+        cardEl.innerHTML = `
+          <div class="folder-title">Folder ${i+1}</div>
+          <div class="folder-range">Từ ${start+1} – ${end}</div>
+          <div class="progress"><div class="bar" style="width:${percent}%;"></div></div>
+          <div class="folder-progress">${knownCount}/${total} từ đã Known (${percent}%)</div>
+          <div class="folder-actions">
+            <button class="btn study">Học</button>
+            <button class="btn reset">Reset</button>
+          </div>
+        `;
+        const [btnStudy, btnReset] = cardEl.querySelectorAll('button');
+        btnStudy.addEventListener('click', ()=>{
+          openFolder(i);
+        });
+        btnReset.addEventListener('click', ()=>{
+          for(let idx=start; idx<end; idx++){
+            knownSet.delete(idx);
+          }
+          saveKnown();
+          buildFolders();
+        });
+
+        foldersGrid.appendChild(cardEl);
+      }
+    }
+
+    function openFolder(folderIdx){
+      currentFolderIndex = folderIdx;
+      const start = folderIdx * FOLDER_SIZE;
+      const end = Math.min((folderIdx+1)*FOLDER_SIZE, cards.length);
+
+      currentDeckIndices = [];
+      for(let i=start; i<end; i++){
+        currentDeckIndices.push(i);
+      }
+      // shuffle nhẹ
+      for(let i=currentDeckIndices.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [currentDeckIndices[i], currentDeckIndices[j]] = [currentDeckIndices[j], currentDeckIndices[i]];
+      }
+      currentDeckPos = 0;
+      studyFolderLabel.textContent = `Folder ${folderIdx+1} · Từ ${start+1}–${end}`;
+      folderScreen.style.display = 'none';
+      studyScreen.style.display = 'flex';
+      showCurrentCard();
+    }
+
+    function showCurrentCard(){
+      if(currentDeckIndices.length === 0){
+        hanziFront.textContent = '…';
+        pinyinFront.textContent = '';
+        hanziBack.textContent = '…';
+        pinyinBack.textContent = '';
+        meaningBack.textContent = 'Hết thẻ trong folder này 🎉';
+        exampleBack.textContent = '';
+        return;
+      }
+      if(currentDeckPos < 0) currentDeckPos = 0;
+      if(currentDeckPos >= currentDeckIndices.length) currentDeckPos = currentDeckIndices.length-1;
+
+      const cardIndex = currentDeckIndices[currentDeckPos];
+      const card = cards[cardIndex];
+
+      hanziFront.textContent = card.hanzi;
+      pinyinFront.textContent = card.pinyin;
+      hanziBack.textContent = card.hanzi;
+      pinyinBack.textContent = card.pinyin;
+      meaningBack.textContent = card.vn || '';
+      exampleBack.textContent = card.example || '';
+
+      inner.classList.remove('flipped');
+    }
+
+    function nextCard(){
+      if(currentDeckIndices.length===0) return;
+      currentDeckPos = (currentDeckPos + 1) % currentDeckIndices.length;
+      showCurrentCard();
+    }
+
+    function prevCard(){
+      if(currentDeckIndices.length===0) return;
+      currentDeckPos = (currentDeckPos - 1 + currentDeckIndices.length) % currentDeckIndices.length;
+      showCurrentCard();
+    }
+
+    let touchStartX = null;
+    inner.addEventListener('click', ()=> inner.classList.toggle('flipped'));
+    inner.addEventListener('touchstart', e=>{
+      touchStartX = e.touches[0].clientX;
+    });
+    inner.addEventListener('touchend', e=>{
+      if(touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if(dx > 40){
+        // vuốt phải = next
+        nextCard();
+      }else if(dx < -40){
+        // vuốt trái = again
+        // giữ nguyên index, chỉ lật mặt về front
+        inner.classList.remove('flipped');
+      }
+      touchStartX = null;
+    });
+
+    prevBtn.addEventListener('click', prevCard);
+    nextBtn.addEventListener('click', nextCard);
+
+    againBtn.addEventListener('click', ()=>{
+      // không đánh Known, chỉ sang thẻ tiếp theo
+      nextCard();
+    });
+
+    knownBtn.addEventListener('click', ()=>{
+      if(currentDeckIndices.length === 0) return;
+      const cardIndex = currentDeckIndices[currentDeckPos];
+      knownSet.add(cardIndex);
+      saveKnown();
+      buildFolders();
+      nextCard();
+    });
+
+    backToFolders.addEventListener('click', ()=>{
+      studyScreen.style.display = 'none';
+      folderScreen.style.display = 'flex';
+      buildFolders();
+    });
+
+    // ÂM THANH FLASHCARD – SỬ DỤNG speechSynthesis
+    function speakCurrentCard(){
+      if(!('speechSynthesis' in window)){
+        alert('Trình duyệt của bạn không hỗ trợ đọc to (speechSynthesis).');
+        return;
+      }
+      if(currentDeckIndices.length === 0) return;
+      const cardIndex = currentDeckIndices[currentDeckPos];
+      const card = cards[cardIndex];
+const text = card.hanzi;
+
+const utter = new SpeechSynthesisUtterance(text);
+utter.lang = 'zh-CN';
+
+      // Hủy queue cũ, đọc thẻ hiện tại
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utter);
+    }
+
+    speakBtn.addEventListener('click', speakCurrentCard);
+
+    // khởi tạo folder khi load
+    buildFolders();
+
+    /* =========================
+       4. MODE 2 – GÕ HÁN TỰ
+    ========================== */
+
+    const m1Vn = document.getElementById('m1-vn');
+    const m1Pinyin = document.getElementById('m1-pinyin');
+    const m1Input = document.getElementById('m1-input');
+    const m1Check = document.getElementById('m1-check');
+    const m1Show = document.getElementById('m1-show');
+    const m1Next = document.getElementById('m1-next');
+    const m1Feedback = document.getElementById('m1-feedback');
+
+    let currentTypeIndex = 0;
+
+    function pickRandomIndex(){
+      if(!cards || cards.length===0) return 0;
+      return Math.floor(Math.random()*cards.length);
+    }
+
+    function loadTypeCard(){
+      if(!cards || cards.length===0){
+        m1Vn.textContent = 'Chưa có dữ liệu từ vựng.';
+        m1Pinyin.textContent = '';
+        return;
+      }
+      currentTypeIndex = pickRandomIndex();
+      const c = cards[currentTypeIndex];
+      m1Vn.textContent = c.vn || '';
+      m1Pinyin.textContent = c.pinyin ? `Pinyin: ${c.pinyin}` : '';
+      m1Input.value = '';
+      m1Feedback.textContent = '';
+    }
+
+    function checkTypeAnswer(){
+      const user = m1Input.value.trim();
+      if(!user){
+        m1Feedback.textContent = 'Hãy gõ Hán tự trước khi kiểm tra.';
+        m1Feedback.className = 'feedback err';
+        return;
+      }
+      const c = cards[currentTypeIndex];
+      if(user === c.hanzi){
+        m1Feedback.textContent = '✅ Chính xác! Giỏi quá.';
+        m1Feedback.className = 'feedback ok';
+      }else{
+        m1Feedback.textContent = `❌ Sai rồi. Đáp án đúng: ${c.hanzi}`;
+        m1Feedback.className = 'feedback err';
+      }
+    }
+
+    function showTypeAnswer(){
+      const c = cards[currentTypeIndex];
+      m1Input.value = c.hanzi || '';
+      m1Feedback.textContent = `Đáp án: ${c.hanzi}`;
+      m1Feedback.className = 'feedback ok';
+    }
+
+    m1Check.addEventListener('click', checkTypeAnswer);
+    m1Show.addEventListener('click', showTypeAnswer);
+    m1Next.addEventListener('click', loadTypeCard);
+    m1Input.addEventListener('keydown', e=>{
+      if(e.key === 'Enter'){
+        checkTypeAnswer();
+      }
+    });
+
+    loadTypeCard();
+
+    /* =========================
+       5. MODE 3 – ĐIỀN TỪ VÀO CÂU
+    ========================== */
+
+    const m2SentenceEl = document.getElementById('m2-sentence');
+    const m2VnEl = document.getElementById('m2-vn');
+    const m2OptionsEl = document.getElementById('m2-options');
+    const m2FeedbackEl = document.getElementById('m2-feedback');
+    const m2NextBtn = document.getElementById('m2-next');
+
+    let currentClozeIndex = 0;
+    let currentClozeAnswer = '';
+
+    function shuffleArray(arr){
+      for(let i=arr.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [arr[i],arr[j]] = [arr[j],arr[i]];
+      }
+    }
+
+    function buildClozeQuestion(){
+      if(!cards || cards.length===0){
+        m2SentenceEl.textContent = 'Chưa có dữ liệu từ vựng.';
+        m2VnEl.textContent = '';
+        m2OptionsEl.innerHTML = '';
+        return;
+      }
+
+      currentClozeIndex = pickRandomIndex();
+      const c = cards[currentClozeIndex];
+
+      let cn = '';
+      let vn = '';
+      if(c.example){
+        const lines = c.example.split('\n');
+        cn = (lines[0] || '').trim();
+        // cố lấy dòng tiếng Việt; nếu không có thì lấy dòng 2
+        vn = (lines[2] || lines[1] || '').trim();
+      }
+
+      if(!cn){
+        cn = c.hanzi + ' ____';
+      }
+
+      // tạo câu có chỗ trống
+      let masked = cn;
+      if(c.hanzi && cn.includes(c.hanzi)){
+        masked = cn.replace(c.hanzi, '____');
+      }else{
+        masked = '____ ' + cn;
+      }
+
+      currentClozeAnswer = c.hanzi;
+
+      // tạo options: 1 đúng + 3 random
+      const optionSet = new Set();
+      optionSet.add(c.hanzi);
+      while(optionSet.size < 4 && optionSet.size < cards.length){
+        const idx = pickRandomIndex();
+        optionSet.add(cards[idx].hanzi);
+      }
+
+      const options = Array.from(optionSet);
+      shuffleArray(options);
+
+      m2SentenceEl.textContent = masked;
+      m2VnEl.textContent = vn ? `Gợi ý: ${vn}` : '';
+      m2OptionsEl.innerHTML = '';
+      m2FeedbackEl.textContent = '';
+
+      options.forEach(opt=>{
+        const btn = document.createElement('button');
+        btn.className = 'm2-option';
+        btn.textContent = opt;
+        btn.addEventListener('click', ()=>{
+          handleClozeClick(btn, opt);
+        });
+        m2OptionsEl.appendChild(btn);
+      });
+    }
+
+    function handleClozeClick(btn, value){
+      const all = m2OptionsEl.querySelectorAll('.m2-option');
+      all.forEach(b=>b.disabled = true);
+
+      if(value === currentClozeAnswer){
+        btn.classList.add('correct');
+        m2FeedbackEl.textContent = '✅ Chính xác!';
+        m2FeedbackEl.className = 'feedback ok';
+      }else{
+        btn.classList.add('wrong');
+        m2FeedbackEl.textContent = `❌ Sai rồi. Đáp án đúng là: ${currentClozeAnswer}`;
+        m2FeedbackEl.className = 'feedback err';
+        // tô màu đáp án đúng
+        all.forEach(b=>{
+          if(b.textContent === currentClozeAnswer){
+            b.classList.add('correct');
+          }
+        });
+      }
+    }
+
+    m2NextBtn.addEventListener('click', buildClozeQuestion);
+    buildClozeQuestion();
+
+  </script>
+</body>
+</html>
